@@ -1,0 +1,31 @@
+<?php
+return [
+
+    'welcome' => 'Sign in to start your session',
+    'auth' => 'Email or Username',
+    'password' => 'Password',
+    'Confirm_Password' => 'Confirm Password',
+    'remember_me' => 'Remember Me',
+    'sign_in' => 'Sign In',
+    'password_forget' => 'I forgot my password',
+    'title' => 'Login',
+    'Auth_Error' => 'Username or Email incorrect',
+    'Password_Error' => 'Password don’t match',
+    'new_password' => 'Request new password',
+    'forget_msg' => 'You forgot your password? Here you can easily retrieve a new password.',
+    'forget_title' => 'Forget Password',
+    'password_reset' => 'Reset Password',
+    'Auth_Dont_Match' => 'Email or Username don’t match',
+    'Message_Sent' => 'Message Sent Successfully',
+    'change_password' => 'Change password',
+    'Set_New_Password' => 'Set new password',
+    'Confirmation_Code' => 'Confirmation Code',
+    'reset_msg' => 'You are only one step a way from your new password, recover your password now.',
+    'Password_Changed_Msg' => 'Password changed successfully',
+    'Confirmation_Code_Error' => 'Confirmation code not valid',
+    'email' => 'E-Mail',
+    'confirmed_password' => 'Confirm Password',
+    '' => '',
+    '' => '',
+
+];

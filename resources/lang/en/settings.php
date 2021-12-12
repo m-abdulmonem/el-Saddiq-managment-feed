@@ -1,0 +1,38 @@
+<?php
+
+
+return [
+
+    'title' => 'Settings',
+    'Main_Title' => 'Main Settings',
+    'Apps_Title' => 'Mobile Apps',
+    'Site_name_ar' => 'Site name in arabic',
+    'Site_name_en' => 'Site name in english',
+    'Site_description' => 'Site Description',
+    'Main_info' => 'Main Info',
+    'Logo' => 'Logo',
+    'Icon' => 'Icon',
+    'Maintenance_tile' => 'Maintenance Info',
+    'Paginate' => 'Paginate Count',
+    'Email' => 'Site Email',
+    'Phone' => 'Site Phone',
+    'Keywords' => 'Keywords',
+    'Status' => 'Site Status',
+    'Status_open' => 'Opened',
+    'Status_close' => 'Closed',
+    'Social_title' => 'Social Media Links',
+    'FB_link' => 'Facebook Page Link',
+    'TW_link' => 'Twitter Page Link',
+    'Maintenance_start_at' => 'Maintenance start date',
+    'Maintenance_end_at' => 'Maintenance end date',
+    'maintenance_message' => 'Maintenance message',
+    'Ios_link' => 'Ios App Link',
+    'Android_link' => 'Android App Link',
+    'Main_info_success_update' => ' Main Settings updated successfully',
+    'Error_update' => 'You have an error',
+    'Success_update_apps' => 'Apps Link has updated successfully',
+    'Success_update_social_media' => 'Social Media  Links Updated Successfully',
+    'Success_update_maintenance' => 'Maintenance Updated Successfully',
+    '' => '',
+    '' => '',
+];

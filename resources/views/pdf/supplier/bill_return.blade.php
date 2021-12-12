@@ -1,0 +1,3 @@
+{{
+dd($data->getProducts()->get())
+}}
