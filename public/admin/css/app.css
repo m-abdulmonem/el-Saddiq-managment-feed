@@ -12,6 +12,7 @@
  * ==> dropdown-menu
  * ==> card-header/btn
  * ==> btn-card-group
+ * ==> notifications
  */
 
 @font-face {
@@ -295,3 +296,18 @@ table.table-bordered.dataTable td:last-child{
     letter-spacing: 1px;
     font-size: 22px;
 }
+
+/**
+ * =====> notifications
+ *
+ * ==>notify-list notifications-text
+ */
+.notify-list {
+    height: 300px;
+    overflow: auto;
+}
+
+.notify-list .notification-text{
+    white-space: pre-wrap;
+}
+
