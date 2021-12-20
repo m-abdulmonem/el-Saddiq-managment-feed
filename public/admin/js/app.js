@@ -3,8 +3,10 @@ $(function () {
     $("body").keyup(function (e) {
         if (e.altKey && e.keyCode === 67)
             window.open('Calculator:///');
-        else if (e.altKey && e.keyCode === 78)
-            window.location.href = "/clients/invoices/create";
+        else if (e.altKey && e.keyCode === 78){ //short cat is (alt key && n key)
+        var url = (window.location.href.includes('public') ? '' : '/') + 'clients/invoices/create';
+            window.location.href = url;
+        }
     });
 
     $(".btn-calculator").click(function () {
