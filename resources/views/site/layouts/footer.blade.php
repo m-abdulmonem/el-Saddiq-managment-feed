@@ -35,7 +35,7 @@
 <!-- AdminLTE App -->
 <script src="{{ admin_assets("/js/adminlte.min.js") }}"></script>
 @if(request()->segment(1) == "daily" || request()->segment(1) =="medicines" || implode("/",request()->segments()) === "clients/invoices/create")
-    <script src="{{ mix("/js/app.js") }}"></script>
+    <script src="{{ asset("/js/app.js") }}"></script>
 @endif
 <script src="{{ admin_assets("/js/app.js") }}"></script>
 <script>
