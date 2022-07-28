@@ -24,20 +24,19 @@
     });
 </script>
 <!-- jQuery -->
-<script src="{{ admin_assets("/js/jquery.min.js") }}" ></script>
+<script src="{{ admin_assets("/jquery.min.js") }}" ></script>
 <!-- Bootstrap 4 -->
-<script src="{{ admin_assets("/js/bootstrap.bundle.min.js") }}"></script>
-<script src="{{ admin_assets("/js/moment.min.js") }}"></script>
-<script src="{{ admin_assets("/js/sweetalert.min.js") }}"></script>
+<script src="{{ admin_assets("/bootstrap.bundle.min.js") }}"></script>
+<script src="{{ admin_assets("/moment.min.js") }}"></script>
+<script src="{{ admin_assets("/sweetalert.min.js") }}"></script>
 <!-- toastr -->
-<script src="{{ admin_assets("/js/toastr.min.js") }}"></script>
+<script src="{{ admin_assets("/toastr.min.js") }}"></script>
 @stack("js")
 <!-- AdminLTE App -->
-<script src="{{ admin_assets("/js/adminlte.min.js") }}"></script>
-@if(request()->segment(1) == "daily" || request()->segment(1) =="medicines" || implode("/",request()->segments()) === "clients/invoices/create")
-    <script src="{{ asset("/js/app.js") }}"></script>
-@endif
-<script src="{{ admin_assets("/js/app.js") }}"></script>
+<script src="{{ admin_assets("/adminlte.min.js") }}"></script>
+
+<script src="{{ admin_assets("/app.js") }}"></script>
+
 <script>
     setTimeout(function () {
         // notification(true)
@@ -79,6 +78,9 @@
         })
     }
 </script>
+
+@vite(['resources/js/app.js'])
+
 
 </body>
 </html>

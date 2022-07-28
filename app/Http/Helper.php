@@ -1,42 +1,74 @@
 <?php
 
-
-
-/*
- *  admin side  main url
- *
- */
-
-use App\Models\Product;
 use App\Models\Setting;
 use App\Models\Sms\SmsBody;
-use App\Models\SupplierBill;
-use App\Models\SupplierProduct;
-use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Nexmo\Laravel\Facade\Nexmo;
 
 
-/*
- *  admin side  main url
- *
- */
-if (!function_exists('admin_assets')){
+// /*
+//  *  admin side  main url
+//  *
+//  */
+// if (!function_exists('admin_assets')) {
 
+//     /**
+//      * get admin style files [urls]
+//      *
+//      * @param string $url
+//      * @return string
+//      */
+//     function admin_assets(string $url = '/'): string
+//     {
+//         return asset('assets/dashboard/' . trim($url, '/'));
+//     }
+// }
+if (!function_exists("_assets")) {
+    function _assets($path, $folder, $plugin = null, bool $fullPath = false): string
+    {
+        $assets = "assets/$folder/";
+
+        $imgTypes = ['jpeg', 'jpg', 'png', 'ico', 'svg'];
+        $extension = array_reverse(explode(".", $path));
+
+        if ($fullPath) {
+            return asset($assets . "plugin/$plugin/$path");
+        }
+        if ($plugin) {
+            $pluginFolder = is_string($plugin) ? $plugin : $extension[count($extension) - 1];
+            return asset($assets . "plugin/$pluginFolder/" . $extension[0] . "/$path");
+        }
+        if (in_array($extension[0], $imgTypes)) {
+            return asset($assets . "img/$path");
+        }
+        return asset($assets . $extension[0] . "/$path");
+    }
+}
+
+if (!function_exists("admin_assets")) {
+    function admin_assets($path, $plugin = null, bool $fullPath = false): string
+    {
+        return _assets($path, "dashboard", $plugin, $fullPath);
+    }
+}
+
+if (!function_exists("frontend_assets")) {
     /**
-     * get admin style files [urls]
-     *
-     * @param string $url
-     * @return UrlGenerator|string
+     * @param $path
+     * @param string|null $plugin
+     * @param false $fullPath
+     * @return string
      */
-    function admin_assets($url = '/'){
-        return asset('admin/' . trim($url,'/'));
+    function frontend_assets($path, string $plugin = null, bool $fullPath = false): string
+    {
+        return _assets($path, "frontend", $plugin, $fullPath);
     }
 }
 
@@ -45,12 +77,13 @@ if (!function_exists('admin_assets')){
  *
  *
  */
-if (!function_exists("admin")){
+if (!function_exists("admin")) {
     /**
      * For Admin Middleware
-     * @return void
+     * @return Guard|StatefulGuard
      */
-    function admin(){
+    function admin(): Guard|StatefulGuard
+    {
         return auth()->guard();
     }
 
@@ -60,14 +93,15 @@ if (!function_exists("admin")){
  *
  *
  */
-if (!function_exists("profile")){
+if (!function_exists("profile")) {
     /**
      * For Admin Middleware
-     * @param $property
+     * @param null $property
      * @param bool $update
-     * @return Authenticatable
+     * @return Authenticatable|null
      */
-    function profile($property = null,$update = false){
+    function profile($property = null, bool $update = false)
+    {
         if ($update)
             return auth()->user();
         return (auth()->check())
@@ -76,23 +110,24 @@ if (!function_exists("profile")){
     }
 }
 
-if (! function_exists("user_can")){
+if (!function_exists("user_can")) {
 
-    function user_can($permissions,$all =null,$user = null){
+    function user_can($permissions, $all = null, $user = null)
+    {
         if ($all)
-            return profile(null,true)->hasAllPermissions($permissions);
-        if (!is_array($permissions)){
+            return profile(null, true)->hasAllPermissions($permissions);
+        if (!is_array($permissions)) {
             if ($user)
                 return User::find($user)->can($permissions);
-            return profile(null,true)->can($permissions);
+            return profile(null, true)->can($permissions);
         }
         if ($user)
             return User::find($user)->hasAnyPermission($permissions);
-        return (($profile = profile(null,true)) ? $profile->hasAnyPermission($permissions) : null);
+        return (($profile = profile(null, true)) ? $profile->hasAnyPermission($permissions) : null);
     }
 }
 
-if (! function_exists("btn_delete")){
+if (!function_exists("btn_delete")) {
     /**
      *
      * @param $page_perm
@@ -103,60 +138,66 @@ if (! function_exists("btn_delete")){
      * @param null $title
      * @return string
      */
-    function btn_delete($page_perm, $url, $data, $property = null,$back = false,$title = null){
-       return (user_can("delete $page_perm"))
+    function btn_delete($page_perm, $url, $data, $property = null, bool $back = false, $title = null): string
+    {
+        return (user_can("delete $page_perm"))
             ? '<button class="btn btn-danger btn-delete " type="button"
                        data-url="' . route("$url.destroy", $data->id) . '"
-                       data-name="' .   ($property ? $data->$property :$data->name) . '" 
+                       data-name="' . ($property ? $data->$property : $data->name) . '"
                        data-token="' . csrf_token() . '"
                        data-title="' . trans("home.confirm_delete") . '"
-                       data-text="' . trans("home.alert_delete",['name'=> $property ? $data->$property : $data->name]) . '"
-                       ' . ($back ? 'data-back=' . route("$url.index")  : null)  . '>
+                       data-text="' . trans("home.alert_delete", ['name' => $property ? $data->$property : $data->name]) . '"
+                       ' . ($back ? 'data-back=' . route("$url.index") : null) . '>
                        <i class="fa fa-trash"></i> ' . ($title ? trans("home.delete") : null) . '</a>'
             : "<button class='btn btn-danger disabled'><i class='fa fa-trash'></i></button>";
     }
 }
 
 
-if (! function_exists("btn_update")){
-    function btn_update($page_perm,$url,$data){
+if (!function_exists("btn_update")) {
+    function btn_update($page_perm, $url, $data): string
+    {
         return (user_can("delete $page_perm"))
-            ? '<a href="' . route("$url.edit",$data->id) . '" class="btn btn-info"><i class="fa fa-edit"></i></a>'
-            :"<button class='btn btn-info disabled btn-update'><i class='fa fa-edit'></i></button>";
+            ? '<a href="' . route("$url.edit", $data->id) . '" class="btn btn-info"><i class="fa fa-edit"></i></a>'
+            : "<button class='btn btn-info disabled btn-update'><i class='fa fa-edit'></i></button>";
     }
 }
 
-if (! function_exists("button_update")){
-    function button_update($page_perm,$url,$data){
+if (!function_exists("button_update")) {
+    function button_update($page_perm, $url, $data): string
+    {
         return (user_can("delete $page_perm"))
-            ? '<button data-url="' . route("$url.edit",$data->id) . '" class="btn btn-info"><i class="fa fa-edit"></i></button>'
-            :"<button class='btn btn-info disabled btn-update'><i class='fa fa-edit'></i></button>";
+            ? '<button data-url="' . route("$url.edit", $data->id) . '" class="btn btn-info"><i class="fa fa-edit"></i></button>'
+            : "<button class='btn btn-info disabled btn-update'><i class='fa fa-edit'></i></button>";
     }
 }
 
-if (! function_exists("btn_view")){
-    function btn_view($page_perm,$url,$data,$title = null){
+if (!function_exists("btn_view")) {
+    function btn_view($page_perm, $url, $data, $title = null): string
+    {
         return (user_can("read $page_perm"))
-            ? '<a href="' . route("$url.show",$data->id) . '" class="btn btn-success"><i class="fa fa-eye"></i> ' . ($title ? trans("home.read") : null) . '</a>'
-            :"<button class='btn btn-success disabled'><i class='fa fa-eye'></i> " . ($title ? trans("home.read") : null) . "</button>";
+            ? '<a href="' . route("$url.show", $data->id) . '" class="btn btn-success"><i class="fa fa-eye"></i> ' . ($title ? trans("home.read") : null) . '</a>'
+            : "<button class='btn btn-success disabled'><i class='fa fa-eye'></i> " . ($title ? trans("home.read") : null) . "</button>";
     }
 }
-if (! function_exists("btn_create")){
-    function btn_create($page_perm,$url){
+if (!function_exists("btn_create")) {
+    function btn_create($page_perm, $url): string
+    {
         return (user_can("create $page_perm"))
             ? '<a href="' . route("$url.create") . '" class="btn btn-info"><i class="fa fa-plus"></i> ' . trans("home.new") . '</a>'
-            :"<button class='btn btn-info disabled'><i class='fa fa-plus'></i> " . trans("home.new") . "</button>";
+            : "<button class='btn btn-info disabled'><i class='fa fa-plus'></i> " . trans("home.new") . "</button>";
     }
 }
 
 
-if (! function_exists("check_perm")){
+if (!function_exists("check_perm")) {
 
-    function check_perm($permission,$all = null,$user = null,$data_type = null){
+    function check_perm($permission, $all = null, $user = null, $data_type = null)
+    {
         //check if user has permission to read this page
-        if (!user_can($permission,$all,$user)){
+        if (!user_can($permission, $all, $user)) {
             if ($data_type == "json")
-                return json([],403,trans("alert_access_denied"));
+                return json([], 403, trans("alert_access_denied"));
             //show 403 error page => [page unauthorized]
             abort(403);
         }
@@ -168,19 +209,20 @@ if (! function_exists("check_perm")){
  * check valid email
  *
  */
-if (! function_exists("is_email")){
+if (!function_exists("is_email")) {
 
     /**
      *
      * @param string $email
      * @return mixed
      */
-    function is_email(string $email){
+    function is_email(string $email): mixed
+    {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 }
 
-if (! function_exists("errors")){
+if (!function_exists("errors")) {
 
     /**
      * laravel validation errors
@@ -188,14 +230,15 @@ if (! function_exists("errors")){
      *
      * @param $errors
      */
-    function errors ($errors){
+    function errors($errors): void
+    {
         if ($errors)
             foreach ($errors->all() as $error)
                 echo "<div class='alert alert-danger'>$error</div>";
     }
 }
 
-if (! function_exists('controllers_trans')){
+if (!function_exists('controllers_trans')) {
 
     /**
      * Get Controller Arabic Name
@@ -203,14 +246,15 @@ if (! function_exists('controllers_trans')){
      * @param $key
      * @return mixed
      */
-    function controllers_trans($key){
+    function controllers_trans($key): mixed
+    {
         $trans = [
             '/' => trans("home.title"),
-            'settings'=> trans("settings.title"),
-            'users'=> trans("users/users.title"),
-            'user'=> trans("users/users.user"),
-            'clients'=> trans("clients/clients.title"),
-            'categories'=> trans("products/categories.title"),
+            'settings' => trans("settings.title"),
+            'users' => trans("users/users.title"),
+            'user' => trans("users/users.user"),
+            'clients' => trans("clients/clients.title"),
+            'categories' => trans("products/categories.title"),
             'stocks' => trans("stocks.title"),
             'jobs' => trans("users/jobs.title"),
             'attendances' => trans("users/attendances.title"),
@@ -230,13 +274,13 @@ if (! function_exists('controllers_trans')){
             'banks' => trans("transactions/banks.title"),
             'dailies' => trans("dailies.title"),
         ];
-        return array_key_exists($key,$trans)
+        return array_key_exists($key, $trans)
             ? $trans[$key]
             : null;
     }
 }
 
-if (! function_exists('get_breadcrumb')){
+if (!function_exists('get_breadcrumb')) {
 
     /**
      * Get [Breadcrumb]
@@ -244,27 +288,29 @@ if (! function_exists('get_breadcrumb')){
      * @param int $key
      * @param int $second
      * @param null $title
-     * @return string
+     * @return string|null
      */
-    function get_breadcrumb($key = 1,$second = 2,$title = null){
+    function get_breadcrumb(int $key = 1, int $second = 2, $title = null): ?string
+    {
 
         if (request()->segment($key))
             //echo home anchor link
-            echo  '<li class="breadcrumb-item active"><a href="' . url('/') . '">' .  controllers_trans('/') . ' </a></li>';
+            echo '<li class="breadcrumb-item active"><a href="' . url('/') . '">' . controllers_trans('/') . ' </a></li>';
 
-        if (request()->segment($second)){
+        if (request()->segment($second)) {
 
-            $html = '<li class="breadcrumb-item"><a href="' . url(request()->segment($key)) . '"> ' .  controllers_trans(request()->segment($key)) . '</a></li>';
+            $html = '<li class="breadcrumb-item"><a href="' . url(request()->segment($key)) . '"> ' . controllers_trans(request()->segment($key)) . '</a></li>';
 
-            return $html .=  "<li class='breadcrumb-item active'>$title</li>";
+            return $html .= "<li class='breadcrumb-item active'>$title</li>";
 
         }
 //        ( ? $page : null);
-        return  ($page = controllers_trans((request()->segment($key) ? request()->segment($key) : ''))) ?  '<li class="breadcrumb-item active">' .  $page . '</li>' : null;
-    };
+        return ($page = controllers_trans((request()->segment($key) ? request()->segment($key) : ''))) ? '<li class="breadcrumb-item active">' . $page . '</li>' : null;
+    }
+
 }
 
-if ( !function_exists("json") ){
+if (!function_exists("json")) {
 
     /**
      * print data in json format
@@ -272,29 +318,31 @@ if ( !function_exists("json") ){
      * @param mixed $data
      * @return JsonResponse
      */
-    function json($data){
+    function json(mixed $data): JsonResponse
+    {
         $data = is_callable($data) ? $data() : func_get_args();
 
         return response()->json($data);
     }
-};
+}
 
-if (! function_exists("jsonSuccess")){
+if (!function_exists("jsonSuccess")) {
 
     /**
      *
      *
      * @param string $text
-     * @param callable $data
+     * @param callable|null $data
      * @return JsonResponse
      */
-    function jsonSuccess(String $text,$data = null){
+    function jsonSuccess(string $text, callable $data = null): JsonResponse
+    {
 
         return response()->json([
             'text' => $text,
-            'data' => ( func_get_args() > 2
+            'data' => (func_get_args() > 2
                 ? func_get_args()
-                : ( is_callable($data)
+                : (is_callable($data)
                     ? $data()
                     : $data)
             ),
@@ -304,16 +352,17 @@ if (! function_exists("jsonSuccess")){
     }
 }
 
-if (! function_exists("jsonError")){
+if (!function_exists("jsonError")) {
 
     /**
      *
      *
-     * @param $text
-     * @param null $data
+     * @param string $text
+     * @param array $data
      * @return JsonResponse
      */
-    function jsonError(string $text,$data = []){
+    function jsonError(string $text, array $data = []): JsonResponse
+    {
         return response()->json([
             'text' => $text,
             'data' => $data,
@@ -323,28 +372,9 @@ if (! function_exists("jsonError")){
 }
 
 
-if (!function_exists('settings')){
-
-    /**
-     * get site [Settings]
-     *
-     * @param $property
-     * @param bool $action
-     * @param array $data
-     * @return mixed
-     */
-    function settings($property = null, $action = false,$data = []){
-        $settings = Setting::orderBy('id','DESC')->first();
-        if ($action)
-            return $settings
-                ? $settings->update($data)
-                : Setting::create($data);
-        return $settings ? Setting::orderBy('id','DESC')->first()->$property : false;
-    }
-}
 
 
-if (! function_exists('image')){
+if (!function_exists('image')) {
 
     /**
      * Store Images Or Files to Server
@@ -358,17 +388,18 @@ if (! function_exists('image')){
      * @param string $folder_name
      * @return string|UrlGenerator
      */
-    function image($name,$get_img = false,$update = null,$folder_name = 'images'){
+    function image($name, bool $get_img = false, $update = null, string $folder_name = 'images'): UrlGenerator|string
+    {
         if (!request()->hasFile($name) && $update)
             return $update;
-        if (request()->hasFile($name) && !$get_img){
+        if (request()->hasFile($name) && !$get_img) {
             request()->validate([
                 $name => 'image|mimes:jpeg,png,jpg,gif|max:6000'
             ]);
-            return request()->file($name)->store($folder_name,'public');
+            return request()->file($name)->store($folder_name, 'public');
         }
-        if ($get_img){
-            return (strpos($name, 'images') !== false || strpos($name, 'companies_logo') !== false)
+        if ($get_img) {
+            return (str_contains($name, 'images') || str_contains($name, 'companies_logo'))
                 ? asset('storage/' . $name)
                 : admin_assets("img/MAAdminLogo.png");
         }
@@ -376,17 +407,17 @@ if (! function_exists('image')){
 }
 
 
+if (!function_exists("storeImage")) {
 
-if (! function_exists("storeImage")){
-
-    function storeImage($request,$name,$folderName = "images"){
-        if ($request->hasFile($name)){
+    function storeImage($request, $name, $folderName = "images")
+    {
+        if ($request->hasFile($name)) {
 
             $request->validate([
                 $name => 'image|mimes:jpeg,png,jpg,gif|max:6000'
             ]);
 
-            return $request->file($name)->store($folderName,'public');
+            return $request->file($name)->store($folderName, 'public');
         }
 
         return false;
@@ -394,25 +425,27 @@ if (! function_exists("storeImage")){
 }
 
 
-if (! function_exists("updateImage")){
-    function updateImage($request,$name,$file,$folderName = "images") {
+if (!function_exists("updateImage")) {
+    function updateImage($request, $name, $file, $folderName = "images")
+    {
 
-        return ($image = storeImage($request,$name,$folderName)) ? $image : $file;
+        return ($image = storeImage($request, $name, $folderName)) ? $image : $file;
     }
 }
 
 
-if (! function_exists("img")){
+if (!function_exists("img")) {
 
-    function img($name){
-        return (strpos($name, 'images') !== false || strpos($name, 'companies_logo') !== false)
+    function img($name): string
+    {
+        return (str_contains($name, 'images') || str_contains($name, 'companies_logo'))
             ? asset('storage/' . $name)
             : admin_assets("img/MAAdminLogo.png");
     }
 }
 
 
-if (!function_exists('settings')){
+if (!function_exists('settings')) {
 
     /**
      * get site [Settings]
@@ -422,64 +455,70 @@ if (!function_exists('settings')){
      * @param array $data
      * @return mixed
      */
-    function settings($property = null, $action = false,$data = []){
-        $settings = Setting::orderBy('id','DESC')->first();
+    function settings($property = null, bool $action = false, array $data = []): mixed
+    {
+        $settings = Setting::orderBy('id', 'DESC')->first();
         if ($action)
             return $settings
                 ? $settings->update($data)
                 : Setting::create($data);
-        return $settings ? Setting::orderBy('id','DESC')->first()->$property : false;
+        return $settings ? Setting::orderBy('id', 'DESC')->first()->$property : false;
     }
 }
 
-if (! function_exists('get_role_name')){
+if (!function_exists('get_role_name')) {
 
     /**
      * get User Role Name
      * @param $user
      * @return mixed
      */
-    function get_role_name($user){
-        return str_replace(['[','"','"',']'],'',$user->getRoleNames());
+    function get_role_name($user): mixed
+    {
+        return str_replace(['[', '"', '"', ']'], '', $user->getRoleNames());
     }
 }
 
-if (! function_exists("array_extract")){
+if (!function_exists("array_extract")) {
 
-    function array_extract($array, $index = "name"){
-        foreach ($array as $value){
+    function array_extract($array, $index = "name"): void
+    {
+        foreach ($array as $value) {
             echo $value->$index . ",";
         }
     }
 }
 
-if (! function_exists("array_to_string")){
+if (!function_exists("array_to_string")) {
 
-    function array_to_string($array = [],$separator = ","){
+    function array_to_string($array = [], $separator = ","): void
+    {
         foreach ($array as $value)
             echo "$value $separator";
     }
 }
 
-if (! function_exists("get_roles")){
+if (!function_exists("get_roles")) {
 
-    function get_roles($roles){
-        foreach ($roles as $role){
+    function get_roles($roles): void
+    {
+        foreach ($roles as $role) {
             echo "$role->name,";
         }
     }
 }// end of get roles
 
-if (! function_exists("get_days")){
+if (!function_exists("get_days")) {
 
-    function get_days($roles){
-        foreach ($roles as $role){
+    function get_days($roles): void
+    {
+        foreach ($roles as $role) {
             echo "$role->name,";
         }
     }
 }// end of get roles
 
-if (! function_exists("datatable_files")){
+if (!function_exists("datatable_files")) {
     /**
      * get datatable js files
      *
@@ -487,12 +526,13 @@ if (! function_exists("datatable_files")){
      * @param bool $buttons
      * @return string
      */
-    function datatable_files($file_type = "js",$buttons = true){
+    function datatable_files(string $file_type = "js", bool $buttons = true)
+    {
         if ($file_type == "css")
             echo '<!-- DataTables -->
                 <link rel="stylesheet" href="' . admin_assets("/css/dataTables.bootstrap4.min.css") . '">
                  <link rel="stylesheet" href="' . admin_assets("/css/responsive.dataTables.min.css") . '">';
-        if ($file_type == "css" && $buttons){
+        if ($file_type == "css" && $buttons) {
             return '<link rel="stylesheet" href="' . admin_assets("/css/buttons.dataTables.min.css") . '">';
         }
         if ($file_type == "js")
@@ -508,20 +548,21 @@ if (! function_exists("datatable_files")){
     }
 }// end of datatable_files
 
-if (! function_exists("str")){
+if (!function_exists("str")) {
 
     /**
      * make an instance of Str class
      *
      * @return Str
      */
-    function str(){
-        return  new Str();
+    function str(): Str
+    {
+        return new Str();
     }
 
 }//end of str
 
-if (! function_exists("str_limit")){
+if (!function_exists("str_limit")) {
     /**
      * crop your text by [$limit]
      *
@@ -530,53 +571,57 @@ if (! function_exists("str_limit")){
      * @param string $mark
      * @return string
      */
-    function str_limit($str, $limit,$mark = "..."){
-
-        return str()->limit($str,$limit) . $mark;
+    function str_limit($str, $limit, string $mark = "..."): string
+    {
+        return str()->limit($str, $limit) . $mark;
     }
 }//end of str_limit
 
 
-if (! function_exists("active_menu_any")){
+if (!function_exists("active_menu_any")) {
 
-    function active_menu_any(array $routes ,$class = null){
-
+    function active_menu_any(array $routes, $class = null): void
+    {
         foreach ($routes as $route)
-            echo active_menu($route,$class);
+            echo active_menu($route, $class);
     }
 }
 
-if (! function_exists("active_menu_home")){
+if (!function_exists("active_menu_home")) {
 
-    function active_menu_home($class = null){
+    function active_menu_home($class = null)
+    {
         if (!active_menu_route())
             return get_active_menu_class($class);
     }
 }
 
-if (! function_exists("active_menu")){
+if (!function_exists("active_menu")) {
 
-    function active_menu($page,$class = null){
+    function active_menu($page, $class = null)
+    {
 
         return ($page == active_menu_route()) ? get_active_menu_class($class) : null;
     }
 }
-if (! function_exists("active_menu_route")){
+if (!function_exists("active_menu_route")) {
 
-    function active_menu_route(){
+    function active_menu_route(): string
+    {
 
-        $route = implode("/",request()->segments());
+        $route = implode("/", request()->segments());
 
-        $route = str_replace(['create','edit'],"",$route);
+        $route = str_replace(['create', 'edit'], "", $route);
 
-        return trim(preg_replace("/[0-9]/","",$route),"/");
+        return trim(preg_replace("/[0-9]/", "", $route), "/");
     }
 }
 
-if (! function_exists("get_active_menu_class")){
+if (!function_exists("get_active_menu_class")) {
 
-    function get_active_menu_class($class){
-        $classes = ['open' => 'menu-open' , 'active' => 'active'];
+    function get_active_menu_class($class)
+    {
+        $classes = ['open' => 'menu-open', 'active' => 'active'];
 
         if (is_int($class))
             return array_values($classes)[$class];
@@ -585,7 +630,7 @@ if (! function_exists("get_active_menu_class")){
     }
 }
 
-if (! function_exists("select_options")){
+if (!function_exists("select_options")) {
 
     /**
      * select
@@ -595,16 +640,17 @@ if (! function_exists("select_options")){
      * @param null $update
      * @param string $trans_page
      */
-    function select_options($options = [],  $old= null,$update = null,string $trans_page = "users"){
-        foreach ($options as $key => $option){
+    function select_options(array $options = [], $old = null, $update = null, string $trans_page = "users"): void
+    {
+        foreach ($options as $key => $option) {
 
-            $selected = (($key==0 || $option == old($old) || $update === $option) ? "selected" :"");
+            $selected = (($key == 0 || $option == old($old) || $update === $option) ? "selected" : "");
 
-            echo "<option value='$option' " . $selected . ">" . trans("$trans_page.option_" . ( $option ? $option : "default" )) . "</option>";
+            echo "<option value='$option' " . $selected . ">" . trans("$trans_page.option_" . ($option ? $option : "default")) . "</option>";
         }
     }
 }
-if (! function_exists("select_options_db")){
+if (!function_exists("select_options_db")) {
 
     /**
      * select
@@ -614,28 +660,30 @@ if (! function_exists("select_options_db")){
      * @param null $update
      * @param array $attr
      */
-    function select_options_db($options ,  $old= null,$update = null,$attr=[]){
+    function select_options_db($options, $old = null, $update = null, $attr = []): void
+    {
 
 
-        if (! empty($attr)){
-            $id = $attr['key'] ;
+        if (!empty($attr)) {
+            $id = $attr['key'];
             foreach ($options as $obj)
-                echo "<option value='" . $obj->$id . "' " . (($obj->$id ==0 || $obj->$id == old($old) || $update === $obj->$id) ? "selected" :"") . ">" .  get_properties($obj,$attr['data']) . "</option>";
+                echo "<option value='" . $obj->$id . "' " . (($obj->$id == 0 || $obj->$id == old($old) || $update === $obj->$id) ? "selected" : "") . ">" . get_properties($obj, $attr['data']) . "</option>";
         } else
             foreach ($options as $key => $option)
-                echo "<option value='$key' " . (($key==0 || $key == old($old) || $update === $key) ? "selected" :"") . ">$option</option>";
+                echo "<option value='$key' " . (($key == 0 || $key == old($old) || $update === $key) ? "selected" : "") . ">$option</option>";
     }
 }
 
-if (! function_exists("get_properties")){
-    function get_properties($obj,$properties){
+if (!function_exists("get_properties")) {
+    function get_properties($obj, $properties): void
+    {
         foreach ($properties as $property)
-            echo $obj->$property ;
+            echo $obj->$property;
     }
 }
 
 
-if (! function_exists("num_to_arabic")){
+if (!function_exists("num_to_arabic")) {
 
     /**
      * Converts numbers in string from western to eastern Arabic numerals.
@@ -643,38 +691,41 @@ if (! function_exists("num_to_arabic")){
      * @param $number
      * @return string Text with western Arabic numerals converted into eastern Arabic numerals.
      */
-    function num_to_arabic($number)
+    function num_to_arabic($number): string
     {
-        return num_format(NumberFormatter::CURRENCY,$number);
+        return num_format(NumberFormatter::CURRENCY, $number);
     }
 }
 
-if (! function_exists("spell_out")){
+if (!function_exists("spell_out")) {
 
-    function spell_out($value){
-        return num_format(NumberFormatter::SPELLOUT,$value);
+    function spell_out($value): bool|string
+    {
+        return num_format(NumberFormatter::SPELLOUT, $value);
     }
 }
 
-if (! function_exists("num_format")){
+if (!function_exists("num_format")) {
 
-    function num_format($style,$value){
-        return numfmt_format_currency(numfmt_create("ar_EG",$style),$value,"EGP");
+    function num_format($style, $value): bool|string
+    {
+        return numfmt_format_currency(numfmt_create("ar_EG", $style), $value, "EGP");
     }
 }
 
-if (! function_exists("currency")){
+if (!function_exists("currency")) {
 
     /**
      * @param $number
      * @return string
      */
-    function currency($number){
+    function currency($number): string
+    {
         return num_to_arabic($number);
     }
 }
 
-if (! function_exists("to_arabic_int")){
+if (!function_exists("to_arabic_int")) {
 
     /**
      * convert english number to arabic number
@@ -682,81 +733,53 @@ if (! function_exists("to_arabic_int")){
      * @param $num
      * @return mixed
      */
-    function to_arabic_int($num){
-        return $num ? str_replace(['0','1','2','3','4','5','6','7','8','9'], ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'], $num) : null;
+    function to_arabic_int($num): mixed
+    {
+        return $num ? str_replace(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'], $num) : null;
     }
 }
 
-if ( !function_exists("num_to_ar")){
+if (!function_exists("num_to_ar")) {
 
-    function num_to_ar($num){
+    function num_to_ar($num)
+    {
         return to_arabic_int($num);
     }
 }
 
-if (!function_exists("str_contains")){
-
-    /**
-     * check if string or substring contains needle
-     * Find the position of the first occurrence of a substring in a string
-     * @link https://php.net/manual/en/function.strpos.php
-     * @param string $haystack <p>
-     * The string to search in
-     * </p>
-     * @param mixed $needle <p>
-     * If <b>needle</b> is not a string, it is converted
-     * to an integer and applied as the ordinal value of a character.
-     * </p>
-     * @param int $offset [optional] <p>
-     * If specified, search will start this number of characters counted from
-     * the beginning of the string. Unlike {@see strrpos()} and {@see strripos()}, the offset cannot be negative.
-     * </p>
-     * @return int|boolean <p>
-     * Returns the position where the needle exists relative to the beginnning of
-     * the <b>haystack</b> string (independent of search direction
-     * or offset).
-     * Also note that string positions start at 0, and not 1.
-     * </p>
-     * <p>
-     * Returns <b>FALSE</b> if the needle was not found.
-     * </p>
-     * @since 4.0
-     * @since 5.0
-     */
-    function str_contains($haystack,$needle,$offset = 0){
-        return strpos($haystack,$needle,$offset) !== false;
-    }
-}
 
 
-if (! function_exists("date_ar")){
+if (!function_exists("date_ar")) {
     /**
      * @param $date
      * @return Carbon|string
      * @throws Exception
      */
-    function date_ar($date){
+    function date_ar($date)
+    {
         return carbon($date)->locale("ar_AR");
     }
 }
-if (! function_exists("hour_in_ar")){
+if (!function_exists("hour_in_ar")) {
     /**
      * @param $date
      * @return Carbon|string
      */
-    function hour_in_ar($date){
-        return str_replace(['pm','am'],['م','ص'],num_to_ar($date));
+    function hour_in_ar($date)
+    {
+        return str_replace(['pm', 'am'], ['م', 'ص'], num_to_ar($date));
     }
 }
 
 
-if (! function_exists("date_ar_format")){
+if (!function_exists("date_ar_format")) {
     /**
      * @param $date
      * @return string|null
      * @throws Exception
      */
-    function date_ar_format($date){
+    function date_ar_format($date)
+    {
         if ($date instanceof Carbon) {
             $d = date_ar($date);
             return to_arabic_int($d->day) . " $d->monthName, " . to_arabic_int($d->year);
@@ -765,7 +788,7 @@ if (! function_exists("date_ar_format")){
     }
 }
 
-if (! function_exists("carbon")){
+if (!function_exists("carbon")) {
     /**
      * Create a new Carbon instance of
      * given time, or return a new instance.
@@ -775,7 +798,7 @@ if (! function_exists("carbon")){
      * @return Carbon
      * @throws Exception
      */
-    function carbon($datetime = null,$format = 'Y-m-d H:i:s')
+    function carbon(DateTime $datetime = null, string $format = 'Y-m-d H:i:s'): Carbon
     {
         if ($datetime instanceof DateTime) {
             return new Carbon($datetime->format($format));
@@ -785,7 +808,7 @@ if (! function_exists("carbon")){
     }
 }// nd of carbon
 
-if (! function_exists("carbon_parse")){
+if (!function_exists("carbon_parse")) {
     /**
      * Create a new Carbon instance of
      * given time, or return a new instance.
@@ -795,26 +818,29 @@ if (! function_exists("carbon_parse")){
      * @return string
      * @throws Exception
      */
-    function carbon_parse($datetime = null,$format = null){
-        $carbon  = Carbon::parse($datetime);
+    function carbon_parse($datetime = null, $format = null): string
+    {
+        $carbon = Carbon::parse($datetime);
 
         return $format ? $carbon->format($format) : $carbon;
     }
 }
 
 
-if (! function_exists("rand_color")){
+if (!function_exists("rand_color")) {
 
-    function rand_color ($useSeparator = false){
+    function rand_color($useSeparator = false): string
+    {
         $rand = str_pad(dechex(rand(0x000000, 0xFFFFFF)), 6, 0, STR_PAD_LEFT);
 
         return $useSeparator ? "#$rand" : $rand;
     }
 }
 
-if (! function_exists("search")){
+if (!function_exists("search")) {
 
-    function search($key,array $search){
+    function search($key, array $search): array
+    {
         // no shortest distance found, yet
         $shortest = -1;
 
@@ -840,54 +866,53 @@ if (! function_exists("search")){
             // distance, OR if a next shortest word has not yet been found
             if ($lev <= $shortest || $shortest < 0) {
                 // set the closest match, and shortest distance
-                $closest  = $word;
+                $closest = $word;
                 $shortest = $lev;
             }
         }
 
-        return  [
+        return [
             'closest' => $closest,
             'condition' => ($shortest == 0),
-            "mean" => trans("home." . ( ($shortest == 0) ? "exact_match_found" : "did_u_mean" ) ) . ": $closest\n"
+            "mean" => trans("home." . (($shortest == 0) ? "exact_match_found" : "did_u_mean")) . ": $closest\n"
         ];
     }
 
 }
 
-if (! function_exists("nexmoBalance")){
-    function nexmoBalance(){
-        $response = Nexmo::account()->getBalance();
-        return round($response->getBalance(), 2) ;
+
+if (!function_exists("nexmoBalance")) {
+    function smsProviderBalance(): float
+    {
+        return round(2, 2);
     }
 }
-if (! function_exists("nexmoBalanceCheck")){
-    function nexmoBalanceCheck(){
-        return nexmoBalance() > 0.03;
+if (!function_exists("nexmoBalanceCheck")) {
+    /**
+     *
+     * @return bool
+     */
+    function smsProviderBalanceCheck(): bool
+    {
+        return smsProviderBalance() > 0.03;
     }
 }
-if (! function_exists("nexmo")){
+if (!function_exists("nexmo")) {
 
     /**
      * Send SMS Messages By Nexmo Provider
      *
      * @param $to
      * @param $message
-     * @param string $from
      * @return mixed
      */
-    function nexmo($to,$message,$from = null){
+    function smsMessage($to, $message): mixed
+    {
 
-        $nexmo = Nexmo::message()->send([
-            'to' => 2 . $to,
-            'from' => $from ?? "الصديق للاعلاف",
-            'text' => beCallable( $message ),
-            'type' => 'unicode'
-        ]);
-        return $nexmo->getResponseData()['messages'][0];
     }
 }
 
-if ( !function_exists("beCallable") ){
+if (!function_exists("beCallable")) {
 
     /**
      *
@@ -898,16 +923,17 @@ if ( !function_exists("beCallable") ){
      *  its the the function argus count are needed to run the function
      * @return array
      */
-    function beCallable($data,$defaultArgs = 2){
+    function beCallable($data, $defaultArgs = 2)
+    {
 
-        if ( func_get_args() > $defaultArgs )
+        if (func_get_args() > $defaultArgs)
             return func_get_args();
 
-        return ( is_callable( $data ) ? $data() : $data );
+        return (is_callable($data) ? $data() : $data);
     }
 }
 
-if ( ! function_exists("eachData") ){
+if (!function_exists("eachData")) {
 
     /**
      * loop the given array
@@ -916,7 +942,8 @@ if ( ! function_exists("eachData") ){
      * @param callable $callback
      * @return callable|Collection
      */
-    function eachData($data, callable  $callback){
+    function eachData($data, callable $callback)
+    {
         $collect = collect();
 
         foreach ($data as $k => $v)
@@ -926,37 +953,38 @@ if ( ! function_exists("eachData") ){
     }
 }
 
-if (! function_exists("mapArray")){
+if (!function_exists("mapArray")) {
 
-    function mapArray($data,$callback){
+    function mapArray($data, $callback)
+    {
         $collect = collect();
 
         foreach ($data as $k => $v)
-            $callback($collect,$v,$k);
+            $callback($collect, $v, $k);
 
         return $collect;
     }
 }
 
 
-
-if (! function_exists("startDate")){
+if (!function_exists("startDate")) {
     /**
      * reformat unix date format to timestamp
      *
      * @param $date
      * @return false|string
      */
-    function startDate($date){
+    function startDate($date)
+    {
 //        return (!isDate($date))
 //            ?
 //        date("Y-m-d 00:00:00", strtotime("2020-10-25")
-            return date('Y-m-d 00:00:00', strtotime($date));
+        return date('Y-m-d 00:00:00', strtotime($date));
 //            : "$date 00:00:00";
     }
 }
 
-if (! function_exists("endDate")){
+if (!function_exists("endDate")) {
 
     /**
      * reformat unix date format to timestamp
@@ -965,16 +993,17 @@ if (! function_exists("endDate")){
      * @param string $time
      * @return false|string
      */
-    function endDate($date,$time = "23:59:59"){
+    function endDate($date, $time = "23:59:59")
+    {
 //        return (!isDate($date))
 //            ?
-            return date("Y-m-d $time", strtotime($date));
+        return date("Y-m-d $time", strtotime($date));
 //            : "$date $time";
     }
 }
 
 
-if (! function_exists("removeMines")){
+if (!function_exists("removeMines")) {
     /**
      * remove mines from string
      *
@@ -983,11 +1012,11 @@ if (! function_exists("removeMines")){
      */
     function removeMines($val)
     {
-        return (int)str_replace("-","",$val);
+        return (int)str_replace("-", "", $val);
     }
 }
 
-if (! function_exists("isDate")){
+if (!function_exists("isDate")) {
 
     /**
      * check if the given string is valid date
@@ -995,13 +1024,15 @@ if (! function_exists("isDate")){
      * @param string $date
      * @return bool
      */
-    function isDate(string $date){
-        return DateTime::createFromFormat("Y-m-d",$date) !== false;
+    function isDate(string $date)
+    {
+        return DateTime::createFromFormat("Y-m-d", $date) !== false;
     }
 }
-if (! function_exists("smsBody")){
+if (!function_exists("smsBody")) {
 
-    function smsBody($code){
+    function smsBody($code)
+    {
         return SmsBody::findBy($code);
     }
 }

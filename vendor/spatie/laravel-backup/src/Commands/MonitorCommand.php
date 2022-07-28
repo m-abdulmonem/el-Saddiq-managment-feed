@@ -16,6 +16,10 @@ class MonitorCommand extends BaseCommand
 
     public function handle()
     {
+        if (config()->has('backup.monitorBackups')) {
+            $this->warn("Warning! Your config file still uses the old monitorBackups key. Update it to monitor_backups.");
+        }
+
         $hasError = false;
 
         $statuses = BackupDestinationStatusFactory::createForMonitorConfig(config('backup.monitor_backups'));
@@ -29,7 +33,7 @@ class MonitorCommand extends BaseCommand
             } else {
                 $hasError = true;
                 $this->error("The backups on {$diskName} are considered unhealthy!");
-                event(new UnHealthyBackupWasFound($backupDestinationStatus));
+                event(new UnhealthyBackupWasFound($backupDestinationStatus));
             }
         }
 

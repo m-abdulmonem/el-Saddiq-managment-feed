@@ -8,61 +8,39 @@ use Symfony\Component\Process\Process;
 
 class PostgreSql extends DbDumper
 {
-    /** @var bool */
-    protected $useInserts = false;
+    protected bool $useInserts = false;
 
-    /** @var bool */
-    protected $createTables = true;
+    protected bool $createTables = true;
+
+    /** @var false|resource */
+    private $tempFileHandle;
 
     public function __construct()
     {
         $this->port = 5432;
     }
 
-    /**
-     * @return $this
-     */
-    public function useInserts()
+    public function useInserts(): self
     {
         $this->useInserts = true;
 
         return $this;
     }
 
-    /**
-     * Dump the contents of the database to the given file.
-     *
-     * @param string $dumpFile
-     *
-     * @throws \Spatie\DbDumper\Exceptions\CannotStartDump
-     * @throws \Spatie\DbDumper\Exceptions\DumpFailed
-     */
-    public function dumpToFile(string $dumpFile)
+    public function dumpToFile(string $dumpFile): void
     {
         $this->guardAgainstIncompleteCredentials();
 
-        $command = $this->getDumpCommand($dumpFile);
-
         $tempFileHandle = tmpfile();
-        fwrite($tempFileHandle, $this->getContentsOfCredentialsFile());
-        $temporaryCredentialsFile = stream_get_meta_data($tempFileHandle)['uri'];
+        $this->setTempFileHandle($tempFileHandle);
 
-        $envVars = $this->getEnvironmentVariablesForDumpCommand($temporaryCredentialsFile);
-
-        $process = Process::fromShellCommandline($command, null, $envVars, null, $this->timeout);
+        $process = $this->getProcess($dumpFile);
 
         $process->run();
 
         $this->checkIfDumpWasSuccessFul($process, $dumpFile);
     }
 
-    /**
-     * Get the command that should be performed to dump the database.
-     *
-     * @param string $dumpFile
-     *
-     * @return string
-     */
     public function getDumpCommand(string $dumpFile): string
     {
         $quote = $this->determineQuote();
@@ -100,17 +78,25 @@ class PostgreSql extends DbDumper
     public function getContentsOfCredentialsFile(): string
     {
         $contents = [
-            $this->host,
-            $this->port,
-            $this->dbName,
-            $this->userName,
-            $this->password,
+            $this->escapeCredentialEntry($this->host),
+            $this->escapeCredentialEntry($this->port),
+            $this->escapeCredentialEntry($this->dbName),
+            $this->escapeCredentialEntry($this->userName),
+            $this->escapeCredentialEntry($this->password),
         ];
 
         return implode(':', $contents);
     }
 
-    protected function guardAgainstIncompleteCredentials()
+    protected function escapeCredentialEntry($entry): string
+    {
+        $entry = str_replace('\\', '\\\\', $entry);
+        $entry = str_replace(':', '\\:', $entry);
+
+        return $entry;
+    }
+
+    public function guardAgainstIncompleteCredentials()
     {
         foreach (['userName', 'dbName', 'host'] as $requiredProperty) {
             if (empty($this->$requiredProperty)) {
@@ -127,13 +113,38 @@ class PostgreSql extends DbDumper
         ];
     }
 
-    /**
-     * @return $this
-     */
-    public function doNotCreateTables()
+    public function doNotCreateTables(): self
     {
         $this->createTables = false;
 
         return $this;
+    }
+
+    public function getProcess(string $dumpFile): Process
+    {
+        $command = $this->getDumpCommand($dumpFile);
+
+        fwrite($this->getTempFileHandle(), $this->getContentsOfCredentialsFile());
+        $temporaryCredentialsFile = stream_get_meta_data($this->getTempFileHandle())['uri'];
+
+        $envVars = $this->getEnvironmentVariablesForDumpCommand($temporaryCredentialsFile);
+
+        return Process::fromShellCommandline($command, null, $envVars, null, $this->timeout);
+    }
+
+    /**
+     * @return false|resource
+     */
+    public function getTempFileHandle()
+    {
+        return $this->tempFileHandle;
+    }
+
+    /**
+     * @param false|resource $tempFileHandle
+     */
+    public function setTempFileHandle($tempFileHandle): void
+    {
+        $this->tempFileHandle = $tempFileHandle;
     }
 }

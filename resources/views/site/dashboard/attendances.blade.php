@@ -45,7 +45,7 @@
 
                         new FullCalendar.Calendar(document.getElementById('calendar'), {
                             plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid' ],
-                            defaultView:"timeGridWeek",
+                            defaultView:"dayGridMonth",
                             locale: 'ar',
                             header    : {
                                 left  : 'prev,next, today',

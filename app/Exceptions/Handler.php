@@ -48,10 +48,7 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
-        if ($request->is('/') || $request->is('/*')) {
-            return redirect()->guest('login');
-        }
-        return redirect()->guest(route('login'));
+        return redirect(route("login"));
     }
 
     /**
@@ -63,26 +60,41 @@ class Handler extends ExceptionHandler
      *
      * @throws Throwable
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $exception): Response
     {
         if ($this->isHttpException($exception)) {
 
-            switch ($exception->getStatusCode()){
-                case 404:
-                    session()->flash("error-404",404);
-                    return response()->view("site.layouts.errors.404", ['title' => trans("home.404")]);
-                case 500:
-                    return response()->view("site.layouts.errors.500",['title' => trans("home.500")]);
-                case 419:
-                    return response()->view("site.layouts.errors.419",['title' => trans("home.419")]);
-                case 403:
-                    return response()->view("site.layouts.errors.403",['title' => trans("home.403")]);
-                case 429:
-                    return redirect("429");
-                case 501:
-                    return redirect("501");
+            if (\str_contains($request->url(),"dashbaord")){
+                $this->dashboardErrors($exception);
             }
+            
         }
         return parent::render($request, $exception);
+    }
+
+    private function dashboardErrors($exception)
+    {
+        switch ($exception->getStatusCode()){
+            case 404:
+                session()->flash("error-404",404);
+                return $this->dashboardErrorView(404);
+            case 500:
+                return $this->dashboardErrorView(500);
+            case 419:
+                return $this->dashboardErrorView(419);
+            case 403:
+                return $this->dashboardErrorView(403);
+            case 429:
+                return redirect("429");
+            case 501:
+                return redirect("501");
+        }
+    }
+
+    private function dashboardErrorView(string|int $code)
+    {
+        $path = "site.layouts.errors";
+
+        return response()->view("$path.$code",['title' => trans("home.$code")]);
     }
 }

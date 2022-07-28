@@ -20,9 +20,10 @@ trait AuthenticatesUsers
      */
     public function showLoginForm()
     {
-        return view('site.auth.login',[
+        $data = [
             'title' => trans("login.title")
-        ]);
+        ];
+        return view('site.auth.login');
     }
 
     /**
@@ -48,6 +49,10 @@ trait AuthenticatesUsers
         }
 
         if ($this->attemptLogin($request)) {
+            if ($request->hasSession()) {
+                $request->session()->put('auth.password_confirmed_at', time());
+            }
+
             return $this->sendLoginResponse($request);
         }
 
@@ -84,7 +89,7 @@ trait AuthenticatesUsers
     protected function attemptLogin(Request $request)
     {
         return $this->guard()->attempt(
-            $this->credentials($request), $request->filled('remember')
+            $this->credentials($request), $request->boolean('remember')
         );
     }
 
@@ -97,7 +102,6 @@ trait AuthenticatesUsers
     protected function credentials(Request $request)
     {
         $auth = (is_email($request->get($this->username()))) ? $this->username() : "username";
-
         return [
             $auth => $request->get($this->username()),
             'password' => $request->password
@@ -156,7 +160,6 @@ trait AuthenticatesUsers
 
         if ($user->job->isSeller())
             return redirect()->route("dailies.daily");
-
     }
 
     /**

@@ -55,11 +55,11 @@
                         </div>
                         <div class="row pl-4 pr-4 pt-3">
                             <div class="col-6">
-                                <search></search>
+                                <product-search></product-search>
                             </div>
                             <div class="col-4 select2">
                                 <label for="client">@lang("clients/clients.select_client")</label>
-                                <select2></select2>
+                                <user-search></user-search>
                             </div>
                             <div class="col-2">
                                 <div class="form-group">

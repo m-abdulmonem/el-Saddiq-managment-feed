@@ -21,10 +21,10 @@ use Symfony\Component\Console\Terminal;
  */
 class ConsoleSectionOutput extends StreamOutput
 {
-    private $content = [];
-    private $lines = 0;
-    private $sections;
-    private $terminal;
+    private array $content = [];
+    private int $lines = 0;
+    private array $sections;
+    private Terminal $terminal;
 
     /**
      * @param resource               $stream
@@ -63,10 +63,8 @@ class ConsoleSectionOutput extends StreamOutput
 
     /**
      * Overwrites the previous output with a new message.
-     *
-     * @param array|string $message
      */
-    public function overwrite($message)
+    public function overwrite(string|iterable $message)
     {
         $this->clear();
         $this->writeln($message);
@@ -82,17 +80,17 @@ class ConsoleSectionOutput extends StreamOutput
      */
     public function addContent(string $input)
     {
-        foreach (explode(PHP_EOL, $input) as $lineContent) {
+        foreach (explode(\PHP_EOL, $input) as $lineContent) {
             $this->lines += ceil($this->getDisplayLength($lineContent) / $this->terminal->getWidth()) ?: 1;
             $this->content[] = $lineContent;
-            $this->content[] = PHP_EOL;
+            $this->content[] = \PHP_EOL;
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doWrite($message, $newline)
+    protected function doWrite(string $message, bool $newline)
     {
         if (!$this->isDecorated()) {
             parent::doWrite($message, $newline);
@@ -136,8 +134,8 @@ class ConsoleSectionOutput extends StreamOutput
         return implode('', array_reverse($erasedContent));
     }
 
-    private function getDisplayLength(string $text): string
+    private function getDisplayLength(string $text): int
     {
-        return Helper::strlenWithoutDecoration($this->getFormatter(), str_replace("\t", '        ', $text));
+        return Helper::width(Helper::removeDecoration($this->getFormatter(), str_replace("\t", '        ', $text)));
     }
 }

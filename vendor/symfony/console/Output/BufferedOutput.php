@@ -16,14 +16,12 @@ namespace Symfony\Component\Console\Output;
  */
 class BufferedOutput extends Output
 {
-    private $buffer = '';
+    private string $buffer = '';
 
     /**
      * Empties buffer and returns its content.
-     *
-     * @return string
      */
-    public function fetch()
+    public function fetch(): string
     {
         $content = $this->buffer;
         $this->buffer = '';
@@ -39,7 +37,7 @@ class BufferedOutput extends Output
         $this->buffer .= $message;
 
         if ($newline) {
-            $this->buffer .= PHP_EOL;
+            $this->buffer .= \PHP_EOL;
         }
     }
 }

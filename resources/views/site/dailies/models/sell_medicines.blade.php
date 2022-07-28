@@ -15,7 +15,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group ">
-                                <medicine-search></medicine-search>
+                                <medicines-search></medicines-search>
                             </div>
                         </div>
                         <!-- ./col -->

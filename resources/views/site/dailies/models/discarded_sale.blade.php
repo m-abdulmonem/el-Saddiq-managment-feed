@@ -10,7 +10,7 @@
             </div>
             <!-- ./modal-header -->
             <div class="modal-body">
-                <discarded-sale></discarded-sale>
+                <discarded-sale-search></discarded-sale-search>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">@lang("home.close")</button>

@@ -7,36 +7,22 @@ use Symfony\Component\Process\Process;
 
 class Sqlite extends DbDumper
 {
-    /**
-     * Dump the contents of the database to a given file.
-     *
-     * @param string $dumpFile
-     *
-     * @throws \Spatie\DbDumper\Exceptions\DumpFailed
-     */
-    public function dumpToFile(string $dumpFile)
+    public function dumpToFile(string $dumpFile): void
     {
-        $command = $this->getDumpCommand($dumpFile);
-
-        $process = Process::fromShellCommandline($command, null, null, null, $this->timeout);
+        $process = $this->getProcess($dumpFile);
 
         $process->run();
 
         $this->checkIfDumpWasSuccessFul($process, $dumpFile);
     }
 
-    /**
-     * Get the command that should be performed to dump the database.
-     *
-     * @param string $dumpFile
-     *
-     * @return string
-     */
     public function getDumpCommand(string $dumpFile): string
     {
-        $dumpInSqlite = "echo 'BEGIN IMMEDIATE;\n.dump'";
+        $includeTables = rtrim(' '.implode(' ', $this->includeTables));
+
+        $dumpInSqlite = "echo 'BEGIN IMMEDIATE;\n.dump{$includeTables}'";
         if ($this->isWindows()) {
-            $dumpInSqlite = '(echo BEGIN IMMEDIATE; & echo .dump)';
+            $dumpInSqlite = "(echo BEGIN IMMEDIATE; & echo .dump{$includeTables})";
         }
         $quote = $this->determineQuote();
 
@@ -47,5 +33,12 @@ class Sqlite extends DbDumper
         );
 
         return $this->echoToFile($command, $dumpFile);
+    }
+
+    public function getProcess(string $dumpFile): Process
+    {
+        $command = $this->getDumpCommand($dumpFile);
+
+        return Process::fromShellCommandline($command, null, null, null, $this->timeout);
     }
 }

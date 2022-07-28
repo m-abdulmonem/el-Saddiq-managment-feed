@@ -26,7 +26,7 @@ class User extends Authenticatable
 
     public $timestamps = true;
 
-    protected $guard_name = 'web';
+    protected string $guard_name = 'web';
 
     protected $table = 'users';
 
@@ -70,7 +70,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(SupplierBillReturn::class,"user_id");
     }
-    
+
     public function supplierBalance()
     {
         return $this->hasMany('App\Models\SupplierBalance');

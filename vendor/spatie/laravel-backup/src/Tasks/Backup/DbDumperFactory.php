@@ -15,7 +15,7 @@ use Spatie\DbDumper\DbDumper;
 
 class DbDumperFactory
 {
-    protected static $custom = [];
+    protected static array $custom = [];
 
     public static function createFromConnection(string $dbConnectionName): DbDumper
     {
@@ -27,7 +27,7 @@ class DbDumperFactory
 
         try {
             $dbConfig = $parser->parseConfiguration(config("database.connections.{$dbConnectionName}"));
-        } catch (Exception $e) {
+        } catch (Exception) {
             throw CannotCreateDbDumper::unsupportedDriver($dbConnectionName);
         }
 
@@ -80,23 +80,13 @@ class DbDumperFactory
             return (static::$custom[$driver])();
         }
 
-        if ($driver === 'mysql' || $driver === 'mariadb') {
-            return new MySql();
-        }
-
-        if ($driver === 'pgsql') {
-            return new PostgreSql();
-        }
-
-        if ($driver === 'sqlite') {
-            return new Sqlite();
-        }
-
-        if ($driver === 'mongodb') {
-            return new MongoDb();
-        }
-
-        throw CannotCreateDbDumper::unsupportedDriver($driver);
+        return match ($driver) {
+            'mysql', 'mariadb' => new MySql(),
+            'pgsql' => new PostgreSql(),
+            'sqlite' => new Sqlite(),
+            'mongodb' => new MongoDb(),
+            default => throw CannotCreateDbDumper::unsupportedDriver($driver),
+        };
     }
 
     protected static function processExtraDumpParameters(array $dumpConfiguration, DbDumper $dbDumper): DbDumper
@@ -131,8 +121,6 @@ class DbDumperFactory
     protected static function determineValidMethodName(DbDumper $dbDumper, string $methodName): string
     {
         return collect([$methodName, 'set'.ucfirst($methodName)])
-            ->first(function (string $methodName) use ($dbDumper) {
-                return method_exists($dbDumper, $methodName);
-            }, '');
+            ->first(fn (string $methodName) => method_exists($dbDumper, $methodName), '');
     }
 }

@@ -66,13 +66,14 @@ class PermissionSeeder extends Seeder
                     'created_at' => now()
                 ]);
 
-                /**
-                 * give permissions to user
-                 */
-                $user->givePermissionTo([
-                    "$crud_key $perm_key"
-                ]);
             }
+        }
+
+        foreach (Permission::all() as $perm){
+            /**
+             * give permissions to user
+             */
+            $user->givePermissionTo($perm->name);
         }
     }
 }

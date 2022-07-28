@@ -30,7 +30,7 @@
             </li>
         </ul>
         <ul class="navbar-nav">
-            @if(auth()->user()->isAdmin())
+            @if(auth()?->user()?->isAdmin())
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route("dashboard.index") }}" style="cursor: pointer"><i class="fas fa-tachometer-alt"></i> @lang("home.open_dashboard")</a>
                 </li>
@@ -51,7 +51,7 @@
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a href="{{ url("/") }}" class="brand-link">
-            <img src="{{ admin_assets("img/MAAdminLogo.png") }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+            <img src="{{ admin_assets("MAAdminLogo.png") }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                  style="opacity: .8">
             <span class="brand-text font-weight-light">MA Admin</span>
         </a>

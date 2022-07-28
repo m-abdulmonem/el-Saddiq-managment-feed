@@ -11,12 +11,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Chick extends Model
 {
     use SoftDeletes;
+
     public $timestamps = true;
 
     protected $table = 'chicks';
-    protected $dates = ['deleted_at','arrived_at'];
+    protected $dates = ['deleted_at', 'arrived_at'];
 
-    protected $fillable = ['name','type','supplier_id'];
+    protected $fillable = ['name', 'type', 'supplier_id'];
 
 
     /**
@@ -24,7 +25,7 @@ class Chick extends Model
      *
      * @return BelongsTo
      */
-    public function supplier()
+    public function supplier(): BelongsTo
     {
         return $this->belongsTo(Supplier::class);
     }
@@ -32,23 +33,23 @@ class Chick extends Model
     /**
      * @return HasMany
      */
-    public function orders()
+    public function orders(): HasMany
     {
-        return $this->hasMany(ChickOrder::class,'chick_id');
+        return $this->hasMany(ChickOrder::class, 'chick_id');
     }
 
-    public function booking()
+    public function booking(): HasMany
     {
-        return $this->hasMany(BookingChick::class,"chick_id");
+        return $this->hasMany(BookingChick::class, "chick_id");
     }
 
 
     /**
      * @return HasMany
      */
-    public function prices()
+    public function prices(): HasMany
     {
         return $this->hasMany(ChickPrice::class, "chick_id");
     }
-    
+
 }

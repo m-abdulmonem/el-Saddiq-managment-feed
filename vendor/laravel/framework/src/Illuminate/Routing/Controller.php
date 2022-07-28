@@ -13,8 +13,7 @@ abstract class Controller
      */
     protected $middleware = [];
 
-
-    /**
+       /**
      * The view folder name
      *
      * @var string
@@ -27,14 +26,13 @@ abstract class Controller
      * @var string
      */
     protected $perm = "";
-    
+
     /**
      * the translation file name
      *
      * @var string
      */
     protected $trans = "";
-
 
     /**
      * Register middleware on the controller.
@@ -74,7 +72,7 @@ abstract class Controller
      */
     public function callAction($method, $parameters)
     {
-        return call_user_func_array([$this, $method], $parameters);
+        return $this->{$method}(...array_values($parameters));
     }
 
     /**
@@ -93,9 +91,9 @@ abstract class Controller
         ));
     }
 
-    /**
-     * spaite permissions check 
-     * 
+        /**
+     * spaite permissions check
+     *
      * @void
      */
     public function perm()

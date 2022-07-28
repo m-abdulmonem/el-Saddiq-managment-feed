@@ -197,7 +197,7 @@ class UserServices extends User
         $inArabic = ['الاثنين','الثلاثاء','الاربعاء','الخميس','الجمعة','السبت','الاحد'];
         $inEnglish = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
-        $days = str_replace($inArabic,$inEnglish,explode(",",$data));
+        $days = str_replace($inArabic,$inEnglish,explode(",",$data ?? ""));
 
         return array_map("ucfirst",$days);
     }

@@ -8,13 +8,13 @@ use Spatie\Permission\Exceptions\WildcardPermissionNotProperlyFormatted;
 class WildcardPermission
 {
     /** @var string */
-    const WILDCARD_TOKEN = '*';
+    public const WILDCARD_TOKEN = '*';
 
     /** @var string */
-    const PART_DELIMITER = '.';
+    public const PART_DELIMITER = '.';
 
     /** @var string */
-    const SUBPART_DELIMITER = ',';
+    public const SUBPART_DELIMITER = ',';
 
     /** @var string */
     protected $permission;
@@ -41,7 +41,7 @@ class WildcardPermission
     public function implies($permission): bool
     {
         if (is_string($permission)) {
-            $permission = new self($permission);
+            $permission = new static($permission);
         }
 
         $otherParts = $permission->getParts();
@@ -52,7 +52,7 @@ class WildcardPermission
                 return true;
             }
 
-            if (! $this->parts->get($i)->contains(self::WILDCARD_TOKEN)
+            if (! $this->parts->get($i)->contains(static::WILDCARD_TOKEN)
                 && ! $this->containsAll($this->parts->get($i), $otherPart)) {
                 return false;
             }
@@ -61,7 +61,7 @@ class WildcardPermission
         }
 
         for ($i; $i < $this->parts->count(); $i++) {
-            if (! $this->parts->get($i)->contains(self::WILDCARD_TOKEN)) {
+            if (! $this->parts->get($i)->contains(static::WILDCARD_TOKEN)) {
                 return false;
             }
         }
@@ -105,10 +105,10 @@ class WildcardPermission
             throw WildcardPermissionNotProperlyFormatted::create($this->permission);
         }
 
-        $parts = collect(explode(self::PART_DELIMITER, $this->permission));
+        $parts = collect(explode(static::PART_DELIMITER, $this->permission));
 
         $parts->each(function ($item, $key) {
-            $subParts = collect(explode(self::SUBPART_DELIMITER, $item));
+            $subParts = collect(explode(static::SUBPART_DELIMITER, $item));
 
             if ($subParts->isEmpty() || $subParts->contains('')) {
                 throw WildcardPermissionNotProperlyFormatted::create($this->permission);

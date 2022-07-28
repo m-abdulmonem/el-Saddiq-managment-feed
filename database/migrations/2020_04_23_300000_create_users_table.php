@@ -24,6 +24,8 @@ class CreateUsersTable extends Migration {
             $table->string('holidays')->nullable();
             $table->boolean('is_active')->default(true);
             $table->string('device_token')->nullable();
+            $table->rememberToken();
+
 		});
 	}
 

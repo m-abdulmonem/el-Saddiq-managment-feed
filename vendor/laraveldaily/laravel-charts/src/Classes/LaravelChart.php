@@ -28,11 +28,13 @@ class LaravelChart
      * @param $chart_options
      * @throws \Exception
      */
-    public function __construct($chart_options)
+    public function __construct()
     {
-        $this->options                  = $chart_options;
-        $this->options['chart_name']    = strtolower(Str::slug($chart_options['chart_title'], '_'));
-        $this->datasets                 = $this->prepareData();
+        foreach (func_get_args() as $arg) {
+            $this->options = $arg;
+            $this->options['chart_name'] = strtolower(Str::slug($arg['chart_title'], '_'));
+            $this->datasets[] = $this->prepareData();
+        }
     }
 
     /**
@@ -48,11 +50,15 @@ class LaravelChart
                 return [];
             }
 
-            $datasets = [];
+            $dataset = [];
             $conditions = $this->options['conditions'] ??
-                [['name' => '', 'condition' => "", 'color' => '']];
+                [['name' => '', 'condition' => "", 'color' => '', 'fill' => '']];
 
             foreach ($conditions as $condition) {
+                if (isset($this->options['top_results']) && !is_int($this->options['top_results'])) {
+                    throw new \Exception('Top results value should be integer');
+                }
+
                 $query = $this->options['model']::when(isset($this->options['filter_field']), function ($query) {
 
                     if (isset($this->options['filter_days'])) {
@@ -97,7 +103,23 @@ class LaravelChart
                     $query->with($this->options['relationship_name']);
                 }
 
-                $collection = $query->get();
+                if (isset($this->options['with_trashed']) && $this->options['with_trashed']) {
+                    $query->withTrashed();
+                }
+
+                if (isset($this->options['only_trashed']) && $this->options['only_trashed']) {
+                    $query->onlyTrashed();
+                }
+
+                if (isset($this->options['withoutGlobalScopes']) && $this->options['withoutGlobalScopes']) {
+                    $scopesToExclude = is_array($this->options['withoutGlobalScopes'])
+                        ? $this->options['withoutGlobalScopes']
+                        : null;
+
+                    $collection = $query->withoutGlobalScopes($scopesToExclude)->get();
+                } else {
+                    $collection = $query->get();
+                }
 
                 if ($this->options['report_type'] != 'group_by_relationship') {
                     $collection->where($this->options['group_by_field'], '!=', '');
@@ -119,13 +141,15 @@ class LaravelChart
                                 return $entry->{$this->options['group_by_field']}
                                     ->format($this->options['date_format'] ?? self::GROUP_PERIODS[$this->options['group_by_period']]);
                             } else {
-                                if ($entry->{$this->options['group_by_field']} && $this->options['group_by_field_format']) {
-                                    return \Carbon\Carbon::createFromFormat($this->options['group_by_field_format'],
+                                if ($entry->{$this->options['group_by_field']} && isset($this->options['group_by_field_format'])) {
+                                    return \Carbon\Carbon::createFromFormat(
+                                        $this->options['group_by_field_format'],
                                         $entry->{$this->options['group_by_field']}
                                     )
                                         ->format($this->options['date_format'] ?? self::GROUP_PERIODS[$this->options['group_by_period']]);
-                                }else if ($entry->{$this->options['group_by_field']}) {
-                                    return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',
+                                } else if ($entry->{$this->options['group_by_field']}) {
+                                    return \Carbon\Carbon::createFromFormat(
+                                        'Y-m-d H:i:s',
                                         $entry->{$this->options['group_by_field']}
                                     )
                                         ->format($this->options['date_format'] ?? self::GROUP_PERIODS[$this->options['group_by_period']]);
@@ -143,18 +167,47 @@ class LaravelChart
                                 $aggregate = $this->options['aggregate_transform']($aggregate);
                             }
                             return $aggregate;
+                        })
+                        ->when(isset($this->options['top_results']), function ($coll) {
+                            return $coll
+                                ->sortDesc()
+                                ->take($this->options['top_results'])
+                                ->sortKeys();
                         });
                 } else {
                     $data = collect([]);
                 }
 
 
+                if (
+                    (isset($this->options['date_format']) || isset($this->options['group_by_period'])) &&
+                    isset($this->options['filter_days']) &&
+                    @$this->options['show_blank_data']
+                ) {
+                    $newData = collect([]);
+                    $format = $this->options['date_format'] ?? self::GROUP_PERIODS[$this->options['group_by_period']];
+
+                    CarbonPeriod::since(now()->subDays($this->options['filter_days']))
+                        ->until(now())
+                        ->forEach(function (Carbon $date) use ($data, &$newData, $format) {
+                            $key = $date->format($format);
+                            $newData->put($key, $data[$key] ?? 0);
+                        });
+
+                    $data = $newData;
+                }
+
                 if (@$this->options['continuous_time']) {
                     $dates = $data->keys();
                     $interval = $this->options['group_by_period'] ?? 'day';
                     $newArr = [];
                     if (!is_null($dates->first()) or !is_null($dates->last())) {
-                        $period = CarbonPeriod::since($dates->first())->$interval()->until($dates->last())
+                        if ($dates->first() === $dates->last()) {
+                            $firstDate = Carbon::createFromDate(($dates->first()))->addDays(-14);
+                            $lastDate = Carbon::createFromDate(($dates->last()))->addDays(14);
+                        }
+
+                        $period = CarbonPeriod::since($firstDate ?? $dates->first())->$interval()->until($lastDate ?? $dates->last())
                             ->filter(function (Carbon $date) use ($data, &$newArr) {
                                 $key = $date->format($this->options['date_format'] ?? 'Y-m-d');
                                 $newArr[$key] = $data[$key] ?? 0;
@@ -164,10 +217,10 @@ class LaravelChart
                     }
                 }
 
-                $datasets[] = ['name' => $condition['name'], 'color' => $condition['color'], 'data' => $data];
+                $dataset = ['name' => $this->options['chart_title'], 'color' => $condition['color'], 'chart_color' => $this->options['chart_color'] ?? '', 'fill' => $condition['fill'], 'data' => $data];
             }
 
-            return $datasets;
+            return $dataset;
         } catch (\Error $ex) {
             throw new \Exception('Laravel Charts error: ' . $ex->getMessage());
         }

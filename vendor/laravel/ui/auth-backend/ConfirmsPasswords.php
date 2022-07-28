@@ -16,7 +16,7 @@ trait ConfirmsPasswords
      */
     public function showConfirmForm()
     {
-        return view('site.auth.passwords.confirm');
+        return view('auth.passwords.confirm');
     }
 
     /**
@@ -55,7 +55,7 @@ trait ConfirmsPasswords
     protected function rules()
     {
         return [
-            'password' => 'required|password',
+            'password' => 'required|current_password:web',
         ];
     }
 

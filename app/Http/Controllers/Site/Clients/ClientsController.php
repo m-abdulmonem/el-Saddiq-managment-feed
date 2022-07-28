@@ -16,20 +16,15 @@ use Exception;
 
 class ClientsController extends Controller
 {
-    protected $perm = "client";
 
-    protected $trans = "clients/clients";
-
-    protected $folder = "site.clients";
-
-    /**
-     * @var Client
-     */
-    private $client;
-    /**
-     * @var ClientsServices
-     */
-    private $clientsServices;
+    // /**
+    //  * @var Client
+    //  */
+    // private Client $client;
+    // /**
+    //  * @var ClientsServices
+    //  */
+    // private ClientsServices $clientsServices;
 
     /**
      * ClientsController constructor.
@@ -37,12 +32,14 @@ class ClientsController extends Controller
      * @param Client $client
      * @param ClientsServices $clientsServices
      */
-    public function __construct(Client $client, ClientsServices $clientsServices)
+    public function __construct(private Client $client, private ClientsServices $clientsServices)
     {
-        $this->client = $client;
-        $this->clientsServices = $clientsServices;
+        $this->folder = "site.clients";
+        $this->trans = "clients/clients";
+        $this->perm = "client";
 
-        $this->perm();
+        // $this->client = $client;
+        // $this->clientsServices = $clientsServices;
     }
 
     /**
