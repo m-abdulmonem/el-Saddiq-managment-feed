@@ -2,7 +2,7 @@
 @section("content")
     @push("css")
         <!-- Select2 -->
-        <link rel="stylesheet" href="{{ admin_assets("/css/select2.min.css") }}">
+        <link rel="stylesheet" href="{{ admin_assets("/select2.min.css") }}">
     @endpush
     <form action="{{ route("products.store") }}" method="POST" enctype="multipart/form-data">
         <div class="row">
@@ -127,8 +127,8 @@
     </form>
     <!-- /.row -->
     @push("js")
-        <script src="{{ admin_assets("/js/select2.full.min.js") }}"></script>
-        <script src="{{ admin_assets("/js/lang/select2_ar.js") }}"></script>
+        <script src="{{ admin_assets("select2.full.min.js") }}"></script>
+        <script src="{{ admin_assets("lang/select2_ar.js") }}"></script>
         <!-- Select2 -->
         <script>
 

@@ -17,9 +17,15 @@ class StocksController extends Controller
 
     public function index()
     {
-        if (request()->ajax())
-            return datatables()->of( Stock::latest()->get())
-                ->addIndexColumn()
+        $i = 0;
+
+        if (request()->ajax()){
+                    return datatables()->eloquent( Stock::latest())
+                // ->addIndexColumn()
+                  ->editColumn("DT_RowIndex",function ($data) use($i){
+                    $i++;
+                    return $i;
+                })
                 ->addColumn("name",function ($data){
                     return $data->name;
                 })
@@ -41,6 +47,8 @@ class StocksController extends Controller
                 })
                 ->rawColumns(['action','related','name'])
                 ->make(true);
+        }
+        return response()->json([]);
     }
 
     /**
@@ -87,11 +95,11 @@ class StocksController extends Controller
     {
         return json($stock->locationsGraph($request->start,$request->end));
     }
-    
+
     public function stocktaking(StockServices $stock)
     {
         $trans = $this->trans;
-
+        $stock->load('products');
         return view("site.stocks.print.stocktaking",compact("trans","stock"));
     }
 

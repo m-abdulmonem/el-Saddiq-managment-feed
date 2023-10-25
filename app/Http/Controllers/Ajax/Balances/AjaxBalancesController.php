@@ -37,13 +37,13 @@ class AjaxBalancesController extends Controller
      * @param ClientBalance $clientBalance
      * @param SupplierServices $supplierServices
      */
-    public function __construct(SupplierBalance $supplierBalance, ClientBalance $clientBalance,SupplierServices $supplierServices,ClientServices $clientServices)
+    public function __construct(SupplierBalance $supplierBalance, ClientBalance $clientBalance,SupplierServices $supplierServices,)
     {
 
         $this->supplierBalance = $supplierBalance;
         $this->clientBalance = $clientBalance;
         $this->supplierServices = $supplierServices;
-        $this->clientServices = $clientServices;
+        // $this->clientServices = $clientServices;
     }
 
 
@@ -89,37 +89,37 @@ class AjaxBalancesController extends Controller
         }
     }
 
-    public function client(Request $request,ChickOrder $order = null)
-    {
-        if ($request->ajax()){
-            $data = $request->data == "chick-order-balance"
-                ? $this->clientServices->byOrders($request)
-                : $this->clientServices->byBooking($order);
+    // public function client(Request $request,ChickOrder $order = null)
+    // {
+    //     if ($request->ajax()){
+    //         $data = $request->data == "chick-order-balance"
+    //             ? $this->clientServices->byOrders($request)
+    //             : $this->clientServices->byBooking($order);
 
-            return datatables()->of( $data )
-                ->addIndexColumn()
-                ->addColumn("client",function ($data){
-                    return $this->clientLink($data);
-                })
-                ->addColumn("transaction",function ($data){
-                    return $data->name();
-                })
-                ->addColumn("paid",function ($data){
-                    return currency( $data->paid );
-                })
-                ->addColumn("rest",function ($data){
-                    return currency( $data->remaining_amount );
-                })
-                ->addColumn("date",function ($data){
-                    return $data->created_at->diffForHumans();
-                })
-                ->addColumn("user",function ($data){
-                    return $this->userLink($data);
-                })
-                ->rawColumns(['client','user'])
-                ->make(true);
-        }
-    }
+    //         return datatables()->of( $data )
+    //             ->addIndexColumn()
+    //             ->addColumn("client",function ($data){
+    //                 return $this->clientLink($data);
+    //             })
+    //             ->addColumn("transaction",function ($data){
+    //                 return $data->name();
+    //             })
+    //             ->addColumn("paid",function ($data){
+    //                 return currency( $data->paid );
+    //             })
+    //             ->addColumn("rest",function ($data){
+    //                 return currency( $data->remaining_amount );
+    //             })
+    //             ->addColumn("date",function ($data){
+    //                 return $data->created_at->diffForHumans();
+    //             })
+    //             ->addColumn("user",function ($data){
+    //                 return $this->userLink($data);
+    //             })
+    //             ->rawColumns(['client','user'])
+    //             ->make(true);
+    //     }
+    // }
 
 
     /**
@@ -134,29 +134,5 @@ class AjaxBalancesController extends Controller
                    >{$data->supplier->name()}</a>";
     }
 
-    /**
-     * redirect route to Supplier page profile
-     *
-     * @param $data
-     * @return string
-     */
-    private function clientLink($data)
-    {
-        return "<a class='info-color' href='" . route("clients.show",$data->clients->id) . "'
-                   >{$data->clients->name()}</a>";
-    }
 
-
-
-    /**
-     * redirect route to user page profile
-     *
-     * @param $data
-     * @return string
-     */
-    private function userLink($data)
-    {
-        return "<a class='info-color' href='" . route("users.show",$data->user->id) . "'>{$data->user->name()}</a>";
-    }
-    
 }

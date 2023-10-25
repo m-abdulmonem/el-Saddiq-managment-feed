@@ -66,7 +66,13 @@ class Payments extends Model
     }
 
 
-
+    public function scopeToday()
+    {
+        return $this->whereDay("created_at",now()->format("d"))
+            ->whereMonth("created_at",now()->format("m"))
+            ->whereYear("created_at",now()->format("Y"))
+            ->first();
+    }
     public function scopeCreateWith($q,$data)
     {
         $data = array_merge($data,['code' => $this->code(),'user_id'=>auth()->id()]);

@@ -31,6 +31,7 @@ class ClientsServices extends Client
             return $this->bySoldProduct()->merge($this->byReturnedProducts());
     }
 
+
     /**
      * get sold products
      *
@@ -38,10 +39,12 @@ class ClientsServices extends Client
      */
     public function bySoldProduct()
     {
-        $products = mapArray($this->bills,function ($c,$bill){ $c->push($bill->products()->latest()->get()); });
+        $products = mapArray($this->bills, function ($c, $bill) {
+            $c->push($bill->products()->latest()->get()); });
 
-        return mapArray($products,function ($c,$products){
-            foreach ($products as $product) $c->push($product);
+        return mapArray($products, function ($c, $products) {
+            foreach ($products as $product)
+                $c->push($product);
 
             return $c;
         });
@@ -54,14 +57,16 @@ class ClientsServices extends Client
      */
     public function byReturnedProducts()
     {
-        $products = mapArray($this->returnBills,function ($c,$bill){ $c->push($bill->products()->latest()->get()); });
+        $products = mapArray($this->returnBills, function ($c, $bill) {
+            $c->push($bill->products()->latest()->get()); });
 
-        return mapArray($products,function ($c,$products){
-            foreach ($products as $product) $c->push($product);
+        return mapArray($products, function ($c, $products) {
+            foreach ($products as $product)
+                $c->push($product);
             return $c;
         });
     }
-    
+
     /**
      *
      * @param $type
@@ -70,7 +75,7 @@ class ClientsServices extends Client
     public function byType($type)
     {
         if ($type)
-            return $this->where("trader",$type)->latest()->get();
+            return $this->where("trader", $type)->latest()->get();
 
         return $this->latest()->get();
     }
@@ -84,7 +89,7 @@ class ClientsServices extends Client
      */
     public function createWithCode($data)
     {
-        $data = array_merge($data,['code'=>$this->code(),'is_trader' => ($data['trader'] == "true")]);
+        $data = array_merge($data, ['code' => $this->code(), 'is_trader' => ($data['trader'] == "true")]);
 
         return $this->create($data);
     }
@@ -112,7 +117,7 @@ class ClientsServices extends Client
      */
     public function creditor()
     {
-        return ( ( $debt = $this->totalPaid() - $this->totalBills()  ) < 0) ?  removeMines($debt) : 0 ;
+        return (($debt = $this->totalPaid() - $this->totalBills()) < 0) ? removeMines($debt) : 0;
     }
 
     /**
@@ -122,7 +127,7 @@ class ClientsServices extends Client
      */
     public function debtor()
     {
-        return ( ( $debt = $this->totalPaid() - $this->totalBills() ) > 0) ?  $debt : 0 ;
+        return (($debt = $this->totalPaid() - $this->totalBills()) > 0) ? $debt : 0;
     }
 
     /**
@@ -137,9 +142,9 @@ class ClientsServices extends Client
 
     public function prevBalance()
     {
-        return (($balance = $this->totalPaidOfInvoices() - $this->totalBills()) <0) ? removeMines($balance) : 0  ;
+        return (($balance = $this->totalPaidOfInvoices() - $this->totalBills()) < 0) ? removeMines($balance) : 0;
     }
-    
+
     /**
      * get latest bill date
      *
@@ -172,8 +177,8 @@ class ClientsServices extends Client
     public function totalPaidOfInvoices(array $ids = null)
     {
         return $ids
-            ? (int)$this->balance()->whereIn("bill_id",$ids)->where("type","catch")->whereNull("booking_id")->sum("paid")
-            : (int)$this->balance()->where("type","catch")->whereNull("booking_id")->sum("paid");
+            ? (int)$this->balance()->whereIn("bill_id", $ids)->where("type", "catch")->whereNull("booking_id")->sum("paid")
+            : (int)$this->balance()->where("type", "catch")->whereNull("booking_id")->sum("paid");
     }
 
     /**
@@ -183,10 +188,10 @@ class ClientsServices extends Client
      */
     public function totalPaid()
     {
-        return (int)$this->balance()->where("type","catch")->sum("paid");
+        return (int)$this->balance()->where("type", "catch")->sum("paid");
     }
 
-    
+
 
     /**
      * get latest total price of latest bill
@@ -209,17 +214,19 @@ class ClientsServices extends Client
      * @param null $end
      * @return mixed
      */
-    public function invoicesDate($start = null,$end = null)
+    public function invoicesDate($start = null, $end = null)
     {
-        if ($start || $end){
-            $bills = $this->bills()->whereBetween("created_at",[startDate($start),endDate($end)])->pluck("created_at")->toArray();
-            $return = $this->returnBills()->whereBetween("created_at",[startDate($start),endDate($end)])->pluck("created_at")->toArray();
-        }else {
+        if ($start || $end) {
+            $bills = $this->bills()->whereBetween("created_at", [startDate($start), endDate($end)])->pluck("created_at")->toArray();
+            $return = $this->returnBills()->whereBetween("created_at", [startDate($start), endDate($end)])->pluck("created_at")->toArray();
+        }
+        else {
             $bills = $this->bills()->pluck("created_at")->toArray();
             $return = $this->returnBills()->pluck("created_at")->toArray();
         }
-        
-        return collect($bills)->merge($return)->map(function ($v){return $v->format("Y-m-d");})->unique()->sort();
+
+        return collect($bills)->merge($return)->map(function ($v) {
+            return $v->format("Y-m-d"); })->unique()->sort();
     }
 
     /**
@@ -229,18 +236,21 @@ class ClientsServices extends Client
      * @param null $end
      * @return mixed
      */
-    public function quantityDate($start = null,$end = null)
+    public function quantityDate($start = null, $end = null)
     {
-        if ($start || $end){
-            $products = $this->bySoldProduct()->whereBetween("pivot.created_at",[startDate($start),endDate($end)])->pluck("pivot.created_at");
-            $returned = $this->byReturnedProducts()->whereBetween("pivot.created_at",[startDate($start),endDate($end)])->pluck("pivot.created_at");
-        } else{
+        if ($start || $end) {
+            $products = $this->bySoldProduct()->whereBetween("pivot.created_at", [startDate($start), endDate($end)])->pluck("pivot.created_at");
+            $returned = $this->byReturnedProducts()->whereBetween("pivot.created_at", [startDate($start), endDate($end)])->pluck("pivot.created_at");
+        }
+        else {
             $products = $this->bySoldProduct()->pluck("pivot.created_at");
             $returned = $this->byReturnedProducts()->pluck("pivot.created_at");
         }
 
-        return collect($products->map(function ($date){return $date->format("Y-m-d");})->unique()->toArray())
-            ->merge($returned->map(function ($date){return $date->format("Y-m-d");})->unique()->toArray())
+        return collect($products->map(function ($date) {
+            return $date->format("Y-m-d"); })->unique()->toArray())
+            ->merge($returned->map(function ($date) {
+            return $date->format("Y-m-d"); })->unique()->toArray())
             ->unique()->sort()->toArray();
     }
 
@@ -251,8 +261,8 @@ class ClientsServices extends Client
      */
     public function consumptionProductsIds()
     {
-        $callback = function ($data,$product){
-            return $data->put($product->name(),$product->id);
+        $callback = function ($data, $product) {
+            return $data->put($product->name(), $product->id);
         };
         return mapArray($this->bySoldProduct(), $callback);
     }
@@ -264,11 +274,12 @@ class ClientsServices extends Client
      * @param null $end
      * @return Collection
      */
-    public function BookingDate($start = null,$end = null)
+    public function BookingDate($start = null, $end = null)
     {
-        $bills =($start || $end) ? $this->booking()->whereBetween("created_at",[startDate($start),endDate($end)]) : $bills = $this->booking();
+        $bills = ($start || $end) ? $this->booking()->whereBetween("created_at", [startDate($start), endDate($end)]) : $bills = $this->booking();
 
-        return $bills->pluck("created_at")->map(function ($v){return $v->format("Y-m-d");})->unique()->sort();
+        return $bills->pluck("created_at")->map(function ($v) {
+            return $v->format("Y-m-d"); })->unique()->sort();
     }
 
     /**
@@ -278,13 +289,14 @@ class ClientsServices extends Client
      * @param null $end
      * @return array
      */
-    public function bookingQuantityDates($start = null,$end = null)
+    public function bookingQuantityDates($start = null, $end = null)
     {
         $products = ($start || $end)
-            ? $this->booking()->whereBetween("created_at",[startDate($start),endDate($end)])->pluck("created_at")
+            ? $this->booking()->whereBetween("created_at", [startDate($start), endDate($end)])->pluck("created_at")
             : $this->booking()->pluck("created_at");
 
-        return $products->map(function ($date){return $date->format("Y-m-d");})->sort()->unique()->toArray();
+        return $products->map(function ($date) {
+            return $date->format("Y-m-d"); })->sort()->unique()->toArray();
     }
 
     /**
@@ -294,8 +306,8 @@ class ClientsServices extends Client
      */
     public function consumptionChicksIds()
     {
-        $callback =  function ($data,$booking){
-            return $data->put($booking->chick->name,$booking->chick_id);
+        $callback = function ($data, $booking) {
+            return $data->put($booking->chick->name, $booking->chick_id);
         };
         return mapArray($this->booking, $callback);
     }
@@ -307,17 +319,19 @@ class ClientsServices extends Client
      * @param null $end
      * @return mixed
      */
-    public function gainLossDates($start = null,$end = null)
+    public function gainLossDates($start = null, $end = null)
     {
         if ($start || $end) {
             $products = $this->clientProduct()->whereBetween("created_at", [startDate($start), endDate($end)])->pluck("created_at");
-            $booking = $this->booking()->where("is_came",true)->whereBetween("created_at",[startDate($start),endDate($end)])->pluck("created_at");
-        } else {
+            $booking = $this->booking()->where("is_came", true)->whereBetween("created_at", [startDate($start), endDate($end)])->pluck("created_at");
+        }
+        else {
             $products = $this->clientProduct()->pluck("created_at");
-            $booking = $this->booking()->where("is_came",true)->pluck("created_at");
+            $booking = $this->booking()->where("is_came", true)->pluck("created_at");
         }
 
-        return collect($products)->merge($booking)->map(function ($date){return $date->format("Y-m-d");})->unique();
+        return collect($products)->merge($booking)->map(function ($date) {
+            return $date->format("Y-m-d"); })->unique();
     }
 
     /**
@@ -327,15 +341,15 @@ class ClientsServices extends Client
      * @param null $end
      * @return array
      */
-    public function invoicesGraph($start = null,$end = null)
+    public function invoicesGraph($start = null, $end = null)
     {
         $data = [];
-        foreach ($this->invoicesDate($start,$end) as $date){
-            $invoices = $this->bills()->whereBetween("created_at",[startDate($date),endDate($date)]);
+        foreach ($this->invoicesDate($start, $end) as $date) {
+            $invoices = $this->bills()->whereBetween("created_at", [startDate($date), endDate($date)]);
 
-            $returned = $this->returnBills()->whereBetween("created_at",[startDate($date),endDate($date)]);
+            $returned = $this->returnBills()->whereBetween("created_at", [startDate($date), endDate($date)]);
 
-            $data[$date]=[$invoices->count(),-$returned->count()];
+            $data[$date] = [$invoices->count(), -$returned->count()];
         }
         return $data;
     }
@@ -350,12 +364,12 @@ class ClientsServices extends Client
     public function quantityGraph($start = null, $end = null)
     {
         $data = [];
-        foreach ($this->quantityDate($start,$end) as $date){
-            $invoices = $this->bills()->whereBetween("created_at",[startDate($date),endDate($date)]);
+        foreach ($this->quantityDate($start, $end) as $date) {
+            $invoices = $this->bills()->whereBetween("created_at", [startDate($date), endDate($date)]);
 
-            $returned = $this->returnBills()->whereBetween("created_at",[startDate($date),endDate($date)]);
+            $returned = $this->returnBills()->whereBetween("created_at", [startDate($date), endDate($date)]);
 
-            $data[$date]=[$invoices->sum("quantity"),-$returned->sum("quantity")];
+            $data[$date] = [$invoices->sum("quantity"), -$returned->sum("quantity")];
         }
         return $data;
     }
@@ -367,14 +381,14 @@ class ClientsServices extends Client
      * @param $end
      * @return callable|Collection
      */
-    public function consumptionGraph($start,$end)
+    public function consumptionGraph($start, $end)
     {
-        $callback = function ($data,$name,$id) use ($start,$end){
-            $product = $this->bySoldProduct()->where("id",$id);
+        $callback = function ($data, $name, $id) use ($start, $end) {
+            $product = $this->bySoldProduct()->where("id", $id);
 
-            $quantity = ($start || $end) ? $product->whereBetween("pivot.created_at",[startDate($start),endDate($end)]) : $product;
+            $quantity = ($start || $end) ? $product->whereBetween("pivot.created_at", [startDate($start), endDate($end)]) : $product;
 
-            return $data->put($name,[$quantity->sum("pivot.quantity"),rand_color(true)]);
+            return $data->put($name, [$quantity->sum("pivot.quantity"), rand_color(true)]);
         };
 
         return eachData($this->consumptionProductsIds(), $callback);
@@ -387,11 +401,11 @@ class ClientsServices extends Client
      * @param null $end
      * @return array
      */
-    public function bookingGraph($start = null,$end = null)
+    public function bookingGraph($start = null, $end = null)
     {
         $data = [];
-        foreach ($this->BookingDate($start,$end) as $date)
-            $data[$date]=[$this->booking()->whereBetween("created_at",[startDate($date),endDate($date)])->count()];
+        foreach ($this->BookingDate($start, $end) as $date)
+            $data[$date] = [$this->booking()->whereBetween("created_at", [startDate($date), endDate($date)])->count()];
 
         return $data;
     }
@@ -403,11 +417,11 @@ class ClientsServices extends Client
      * @param null $end
      * @return array
      */
-    public function bookingQuantityGraph($start = null,$end = null)
+    public function bookingQuantityGraph($start = null, $end = null)
     {
         $data = [];
-        foreach ($this->bookingQuantityDates($start,$end) as $date)
-            $data[$date]=[$this->booking()->whereBetween("created_at",[startDate($date),endDate($date)])->sum("quantity")];
+        foreach ($this->bookingQuantityDates($start, $end) as $date)
+            $data[$date] = [$this->booking()->whereBetween("created_at", [startDate($date), endDate($date)])->sum("quantity")];
         return $data;
     }
 
@@ -420,12 +434,12 @@ class ClientsServices extends Client
      */
     public function chicksConsumptionGraph($start = null, $end = null)
     {
-        $callback = function ($data,$name,$id) use ($start,$end){
-            $booking = $this->booking()->where("chick_id",$id);
+        $callback = function ($data, $name, $id) use ($start, $end) {
+            $booking = $this->booking()->where("chick_id", $id);
 
-            $quantity = ($start || $end) ? $booking->whereBetween("created_at",[startDate($start),endDate($end)]) : $booking;
+            $quantity = ($start || $end) ? $booking->whereBetween("created_at", [startDate($start), endDate($end)]) : $booking;
 
-            return $data->put($name,[$quantity->sum("quantity"),rand_color(true)]);
+            return $data->put($name, [$quantity->sum("quantity"), rand_color(true)]);
         };
 
         return eachData($this->consumptionChicksIds(), $callback);
@@ -438,19 +452,19 @@ class ClientsServices extends Client
      * @param null $end
      * @return Collection
      */
-    public function gainLossGraph($start = null,$end = null)
+    public function gainLossGraph($start = null, $end = null)
     {
-        $callback = function ($c,$date){
+        $callback = function ($c, $date) {
             $products = $this->clientProduct()->whereBetween("created_at", [startDate($date), endDate($date)]);
             foreach ($products->get() as $product) {
                 $gain = ($product->piece_price - $product->purchase_price) * $product->quantity;
                 $loss = ($loss = $this->totalPaidOfInvoices($products->pluck("bill_id")->toArray()) - $this->totalBills($products->pluck("bill_id")));
-                $gainLoss = $loss < 0 ? ['gain' => 0,'loss' => $loss] : ['gain' => $gain, 'loss' =>0];
-                $c->put($date,$gainLoss);
+                $gainLoss = $loss < 0 ? ['gain' => 0, 'loss' => $loss] : ['gain' => $gain, 'loss' => 0];
+                $c->put($date, $gainLoss);
             }
 
         };
-        return mapArray($this->gainLossDates($start,$end),$callback);
+        return mapArray($this->gainLossDates($start, $end), $callback);
     }
 
 
@@ -473,13 +487,12 @@ class ClientsServices extends Client
      * @return mixed
      */
     public function searchName($keyword)
-    {
-//        $keywords = explode(" ", $keyword);
+    {        //        $keywords = explode(" ", $keyword);
 //
 //        $keywords = count($keywords) == 1 ? strlen($keywords[0]) : null;
 //
 //        return (is_array($keywords)) ? $this->whereIn("name",$keywords)->get() :
-        return $this->where("name","like","%$keyword%")->get();
+        return $this->where("name", "like", "%$keyword%")->get();
     }
 
     /**
@@ -489,7 +502,13 @@ class ClientsServices extends Client
      */
     public function code()
     {
-        return 22 . ($this->count() +1);
+        return 22 . ($this->count() + 1);
+    }
+
+
+    public function getCode()
+    {
+        return $this->code;
     }
 
 
@@ -506,11 +525,13 @@ class ClientsServices extends Client
 
     public function scopeCreditDaysLimit($q)
     {
-        foreach ($this->all() as $client){
-            if ($client->creditor() > 0
+        foreach ($this->all() as $client) {
+            if ($balance = $client->balance()->latest()->first()) {
+                if ($client->creditor() > 0
                 && $client->balance()->latest()->first()->created_at->diffInDays(now()) >= $client->maximum_repayment_period) {
-                $text = trans("clients/clients.alert_credit_days_limit");
-                return SmsServices::createClientSms(nexmo($this->client->phone, $text), $this->client_id);
+                    $text = trans("clients/clients.alert_credit_days_limit");
+                    // return SmsServices::createClientSms(nexmo($this->client->phone, $text), $this->client_id);
+                }
             }
         }
     }

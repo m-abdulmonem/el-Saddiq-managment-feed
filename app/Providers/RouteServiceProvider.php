@@ -75,7 +75,6 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapAjaxRoutes()
     {
         Route::middleware(['web','checkForAttend','checkExpire','clientSMS'])
-            ->namespace($this->ajax)
             ->prefix("ajax")
             ->group(base_path('routes/ajax.php'));
     }

@@ -1,7 +1,7 @@
 @extends("site.layouts.index")
 @section("content")
     @push("css")
-        <link rel="stylesheet" href="{{ admin_assets("package/JqueryFileUpload/jquery.fileupload.css") }}">
+        <link rel="stylesheet" href="{{ admin_assets(path:"package/JqueryFileUpload/jquery.fileupload.css",fullPath: true) }}">
     @endpush
     <form action="{{ route("$trans.store") }}" method="POST" enctype="multipart/form-data">
         <div class="row">
@@ -119,8 +119,8 @@
     </form>
     <!-- /.row -->
     @push("js")
-        <script src="{{ admin_assets("package/JqueryFileUpload/jquery.fileupload-ui.js") }}"></script>
-        <script src="{{ admin_assets("package/JqueryFileUpload/jquery.fileupload.js") }}"></script>
+        <script src="{{ admin_assets(path: "package/JqueryFileUpload/jquery.fileupload-ui.js",fullPath: true) }}"></script>
+        <script src="{{ admin_assets(path: "package/JqueryFileUpload/jquery.fileupload.js",fullPath: true) }}"></script>
         <script>
             $(function () {
                 $("#inputLogo").fileupload({

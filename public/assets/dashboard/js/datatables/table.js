@@ -177,7 +177,7 @@ $.fn.extend({
 
         if (!setting.notColumns.includes("#"))
             //add table row indexed
-            setting.columns.unshift({data: 'DT_RowIndex', name: 'DT_RowIndex'});
+            setting.columns.unshift({data: 'DT_RowIndex',  orderable: false, searchable: false });
 
         if (!setting.notColumns.includes("actions"))
             //add  row actions cell

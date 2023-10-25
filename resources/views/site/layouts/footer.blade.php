@@ -62,21 +62,23 @@
         })
     });
 
-    function notification(timeOut = false) {
-        ajaxApi({
-            url: "{{route("ajax.users.expired.notifications")}}",
-            success: function (data) {
-                (parseInt($(".notify-count").text()) === 0) ? $(".notify-count").hide() : $(".notify-count").text(data[0].length).show();
-                $.each(data[0],function (k,v) {
-                    $(".notify-list").prepend(`<span class="dropdown-item btn-notify" style="cursor: pointer" data-id='${v.id}'>
-                                                    <i class="fas fa-hourglass-end mr-2"></i> <span class="notification-text">${v.text}</span>
-                                                    <span class="float-right text-muted text-sm">${(v.since === 0 ? 'اقل من يوم' : v.since + " يوم ")}  </span>
-                                              </span><div class="dropdown-divider"></div>`);
-                    toastr.warning(v.text)
-                });
-            }
-        })
-    }
+    // ""ajax.users.expired.notifications""
+    // function notification(timeOut = false) {
+    //     ajaxApi({
+    //         url:
+    // ,
+    //         success: function (data) {
+    //             (parseInt($(".notify-count").text()) === 0) ? $(".notify-count").hide() : $(".notify-count").text(data[0].length).show();
+    //             $.each(data[0],function (k,v) {
+    //                 $(".notify-list").prepend(`<span class="dropdown-item btn-notify" style="cursor: pointer" data-id='${v.id}'>
+    //                                                 <i class="fas fa-hourglass-end mr-2"></i> <span class="notification-text">${v.text}</span>
+    //                                                 <span class="float-right text-muted text-sm">${(v.since === 0 ? 'اقل من يوم' : v.since + " يوم ")}  </span>
+    //                                           </span><div class="dropdown-divider"></div>`);
+    //                 toastr.warning(v.text)
+    //             });
+    //         }
+    //     })
+    // }
 </script>
 
 @vite(['resources/js/app.js'])

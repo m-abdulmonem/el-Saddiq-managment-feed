@@ -12,9 +12,9 @@ use Illuminate\Http\JsonResponse;
 class AttendancesController extends Controller
 {
 
-    protected string $folder = "site.dashboard";
-    protected string $trans = "users/attendances";
-    protected string $perm = "attendance";
+    protected $folder = "site.dashboard";
+    protected $trans = "users/attendances";
+    protected $perm = "attendance";
     /**
      * @var Attendance
      */

@@ -2,7 +2,7 @@
 @section("content")
     @push("css")
         {!! datatable_files("css") !!}
-        <link rel="stylesheet" type="text/css" href="{{ admin_assets("css/daterangepicker.css") }}" />
+        <link rel="stylesheet" type="text/css" href="{{ admin_assets("daterangepicker.css") }}" />
     @endpush
 
     <div class="row">
@@ -192,10 +192,10 @@
 
     @push("js")
         {!! datatable_files() !!}
-        <script src="{{ admin_assets("/js/moment.min.js") }}"></script>
-        <script src="{{ admin_assets("js/daterangepicker.js") }}"></script>
-        <script src="{{ admin_assets("js/plugins/datepicker.js") }}"></script>
-        <script type="text/javascript" src="{{ admin_assets("js/plugins/datepicker.js") }}"></script>
+        <script src="{{ admin_assets("moment.min.js") }}"></script>
+        <script src="{{ admin_assets("daterangepicker.js") }}"></script>
+        <script src="{{ admin_assets("plugins/datepicker.js") }}"></script>
+        <script type="text/javascript" src="{{ admin_assets("plugins/datepicker.js") }}"></script>
 
         <script>
             $("#invoicesTable").table({
@@ -213,7 +213,7 @@
                 actionColumnWidth: "250px"
             });
 
-            $("#BookingTable").table({
+            {{-- $("#BookingTable").table({
                 columns: [
                     {data: 'client', name: 'client'},
                     {data: 'phone', name: 'phone'},
@@ -225,7 +225,7 @@
                 url: "{{ route("ajax.booking.index") }}",
                 data: {user: "{{$user->id}}"},
                 actionColumnWidth : "300px"
-            });
+            }); --}}
 
             $(function () {
                 let transactionDate = $("#transactionsDate"),
@@ -245,7 +245,7 @@
 
             });
 
-            
+
             clientTransactions();
 
             function clientTransactions(type = null,start = null, end =null) {

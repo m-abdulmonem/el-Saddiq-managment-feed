@@ -39,7 +39,7 @@ class InvoicesController extends Controller
      */
     protected $perm = "client_bill";
 
-    protected $request_keys = ['discount','total_price','notes','debt','total_price','client_id'];
+    protected $request_keys = ['discount', 'total_price', 'notes', 'debt', 'total_price', 'client_id'];
     /**
      * @var InvoicesServices
      */
@@ -49,10 +49,12 @@ class InvoicesController extends Controller
      * InvoicesController constructor.
      * @param InvoicesServices $invoices
      */
-    public function __construct(InvoicesServices $invoices)
+    public function __construct(InvoicesServices $invoices,Request $request)
     {
         $this->invoices = $invoices;
-        $this->perm();
+        if (!$request->is('api/*')) {
+            $this->perm();
+        }
     }
 
     /**
@@ -67,7 +69,7 @@ class InvoicesController extends Controller
             'trans' => $this->trans
         ];
         //view page
-        return view("$this->folder.index",$data);
+        return view("$this->folder.index", $data);
     }
 
     /**
@@ -81,7 +83,7 @@ class InvoicesController extends Controller
             'title' => trans("$this->trans.create"),
             'trans' => $this->trans
         ];
-        return view("$this->folder.vue.create",$data);
+        return view("$this->folder.vue.create", $data);
     }
 
     /**
@@ -95,8 +97,8 @@ class InvoicesController extends Controller
         $invoice = $this->invoices->createWithCode($request->excepted());
 
         return ($request->daily)
-            ? jsonSuccess(trans("home.alert_success_create"),$invoice)
-            : redirect()->route("ajax.client.print.invoice",$invoice->id);
+            ? jsonSuccess(trans("home.alert_success_create"), $invoice)
+            : redirect()->route("ajax.client.print.invoice", $invoice->id);
     }
 
     /**
@@ -107,12 +109,12 @@ class InvoicesController extends Controller
      */
     public function show(InvoicesServices $invoice)
     {
-        $data =[
-            'title' => trans("$this->trans.view",[$invoice->code]),
+        $data = [
+            'title' => trans("$this->trans.view", [$invoice->code]),
             'trans' => $this->trans,
             'bill' => $invoice,
         ];
-        return view("$this->folder.view",$data);
+        return view("$this->folder.view", $data);
     }
 
     /**
@@ -124,11 +126,11 @@ class InvoicesController extends Controller
     public function edit(InvoicesServices $invoice)
     {
         $data = [
-            'title' => trans("$this->trans.edit",['code' => $invoice->code]),
+            'title' => trans("$this->trans.edit", ['code' => $invoice->code]),
             'trans' => $this->trans,
             'bill' => $invoice
         ];
-        return view("$this->folder.update",$data);
+        return view("$this->folder.update", $data);
     }
 
     /**
@@ -138,14 +140,14 @@ class InvoicesController extends Controller
      * @param InvoicesServices $invoice
      * @return Response
      */
-    public function update(UpdateRequest $request,InvoicesServices $invoice)
+    public function update(UpdateRequest $request, InvoicesServices $invoice)
     {
         $request->type == "discarded_sale"
             ? $invoice->invoices()->createWithCode(array_merge($request->excepted(), ['bill_id' => $invoice->id]))
             : $invoice->update($request->excepted());
 
         return $request->ajax()
-            ? jsonSuccess(trans("home.alert_success_update"),$invoice)
+            ? jsonSuccess(trans("home.alert_success_update"), $invoice)
             : back()->with("success", trans("home.alert_success_update"));
     }
 

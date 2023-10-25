@@ -2,7 +2,7 @@
 @section("content")
     @push("css")
         <!-- Select2 -->
-        <link rel="stylesheet" href="{{ admin_assets("/css/select2.min.css") }}">
+        <link rel="stylesheet" href="{{ admin_assets("select2.min.css") }}">
     @endpush
     <div id="app" class="pt-5">
         <div class="row">
@@ -98,8 +98,8 @@
     </style>
     @push("js")
         <!-- Select2 -->
-        <script src="{{ admin_assets("/js/select2.full.min.js") }}"></script>
-        <script src="{{ admin_assets("/js/lang/select2_ar.js") }}"></script>
+        <script src="{{ admin_assets("select2.full.min.js") }}"></script>
+        <script src="{{ admin_assets("lang/select2_ar.js") }}"></script>
 
         <script>
             $(function () {
@@ -117,7 +117,7 @@
                 });
                 $("body").on("click","#printLastInvoice",function () {
                     ajaxApi({
-                        url: '{{ route('ajax.client.print.last.invoice') }}',
+                        url: '{{ route('ajax.clients.print.last.invoice') }}',
                         success: function (data) {
                             console.log(data);
                             if (data.code === 1)

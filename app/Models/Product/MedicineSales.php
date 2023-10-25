@@ -30,6 +30,14 @@ class MedicineSales extends Model
         return $this->belongsTo(Daily::class,"daily_id");
     }
 
+    public function scopeToday()
+    {
+        return $this->whereDay("created_at",now()->format("d"))
+            ->whereMonth("created_at",now()->format("m"))
+            ->whereYear("created_at",now()->format("Y"))
+            ->first();
+    }
+
     public function scopeCreateWith($q,$request,$daily,$price,$k,$id)
     {
         return $this->create([

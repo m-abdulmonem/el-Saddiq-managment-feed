@@ -6,10 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Transactions\Expenses\CreateRequest;
 use App\Http\Requests\Transactions\Expenses\UpdateRequest;
 use App\Models\Transactions\Expenses;
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class ExpensesController extends Controller
 {
@@ -29,7 +25,7 @@ class ExpensesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return View
      */
     public function index()
     {
@@ -39,16 +35,6 @@ class ExpensesController extends Controller
             'perm' => $this->perm
         ];
         return view("$this->folder.index",$data);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -63,27 +49,6 @@ class ExpensesController extends Controller
         return $expenses->createWith($request->all());
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

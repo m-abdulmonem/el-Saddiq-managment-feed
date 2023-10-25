@@ -1,6 +1,6 @@
 @push("css")
     <!-- Select2 -->
-    <link rel="stylesheet" href="{{ admin_assets("/css/select2.min.css") }}">
+    <link rel="stylesheet" href="{{ admin_assets("select2.min.css") }}">
 @endpush
 
 <div class="modal fade" id="productsModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -137,8 +137,8 @@
 
 @push("js")
     <!-- Select2 -->
-    <script src="{{ admin_assets("/js/select2.full.min.js") }}"></script>
-    <script src="{{ admin_assets("/js/lang/select2_ar.js") }}"></script>
+    <script src="{{ admin_assets("select2.full.min.js") }}"></script>
+    <script src="{{ admin_assets("lang/select2_ar.js") }}"></script>
 
     <script>
         $("#unit_id").select2({

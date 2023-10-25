@@ -7,15 +7,15 @@
     <title>MA Admin | {{ $title ?? '' }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ admin_assets("img/MAAdminLogo.png") }}" type="image/x-icon">
+    <link rel="icon" href="{{ admin_assets("MAAdminLogo.png") }}" type="image/x-icon">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ admin_assets("css/all.min.css") }}">
+    <link rel="stylesheet" href="{{ admin_assets("all.min.css") }}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ admin_assets("css/adminlte.min.css") }}">
+    <link rel="stylesheet" href="{{ admin_assets("adminlte.min.css") }}">
     @stack("css")
-    <link rel="stylesheet" href=" {{  admin_assets("/css/app.css")  }} ">
+    <link rel="stylesheet" href=" {{  admin_assets("app.css")  }} ">
 
 </head>
 <body class="hold-transition login-page">
