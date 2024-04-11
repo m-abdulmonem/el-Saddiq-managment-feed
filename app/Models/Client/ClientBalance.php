@@ -59,6 +59,20 @@ class ClientBalance extends Model
         return $this->count() +1 ;
     }
 
+    public function scopeToday($q)
+    {
+        return $this->whereDay("created_at",now()->format("d"))
+            ->whereMonth("created_at",now()->format("m"))
+            ->whereYear("created_at",now()->format("Y"))
+            ->first();
+    }
+
+    public function scopeWhereToday($q)
+    {
+        return $this->whereDay("created_at",now()->format("d"))
+        ->whereMonth("created_at",now()->format("m"))
+        ->whereYear("created_at",now()->format("Y"));
+    }
 
     /**
      * get transaction type with it code

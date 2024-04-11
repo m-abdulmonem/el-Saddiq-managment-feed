@@ -2,37 +2,48 @@
 
 namespace App\Models\Product;
 
-use App\Models\Category;
-use App\Models\Client\ClientBill;
-use App\Models\Client\ClientBillReturn;
-use App\Models\Client\ClientProduct;
-use App\Models\Client\ClientProductReturn;
-use App\Models\Stock;
-use App\Models\Supplier\Supplier;
-use App\Models\Supplier\SupplierBill;
-use App\Models\Supplier\SupplierBillReturn;
-use App\Models\Supplier\SupplierProduct;
 use App\Models\Unit;
 use App\Models\User;
+use App\Models\Stock;
+use App\Models\Category;
+use Laravel\Scout\Searchable;
+use App\Models\Client\ClientBill;
+use App\Models\Supplier\Supplier;
+use App\Models\Client\ClientProduct;
+use App\Models\Supplier\SupplierBill;
+use App\Models\Client\ClientBillReturn;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Supplier\SupplierProduct;
+use App\Models\Client\ClientProductReturn;
+use App\Models\Supplier\SupplierBillReturn;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Product extends Model 
+class Product extends Model
 {
 
-    use SoftDeletes;
+
+    use SoftDeletes, Searchable;
     public $timestamps = true;
 
     protected $table = 'products';
     protected $dates = ['deleted_at'];
-    protected $fillable = ['code','name','image','weight','profit','discount','notes','valid_for','is_printed','supplier_id','category_id','user_id','unit_id'];
+    protected $fillable = ['code', 'name', 'image', 'weight', 'profit', 'discount', 'notes', 'valid_for', 'is_printed', 'supplier_id', 'category_id', 'user_id', 'unit_id'];
 
+
+
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'code' => $this->code,
+        ];
+    }
 
     public function clientProduct()
     {
-        return $this->hasMany(ClientProduct::class,"product_id");
+        return $this->hasMany(ClientProduct::class , "product_id");
     }
 
     /**
@@ -40,7 +51,7 @@ class Product extends Model
      */
     public function clientProductReturn()
     {
-        return $this->hasMany(ClientProductReturn::class,"product_id");
+        return $this->hasMany(ClientProductReturn::class , "product_id");
     }
     /**
      * @return BelongsTo
@@ -90,7 +101,7 @@ class Product extends Model
             'user_id',
             'bill_id'
         ];
-        return $this->belongsToMany(Stock::class,'products_stocks', 'product_id', 'stock_id')
+        return $this->belongsToMany(Stock::class , 'products_stocks', 'product_id', 'stock_id')
             ->withPivot($columns)
             ->withTimestamps();
     }
@@ -100,40 +111,40 @@ class Product extends Model
      */
     public function discounts()
     {
-        return $this->belongsToMany(ClientBill::class,'discount_products','product_id','bill_id')
+        return $this->belongsToMany(ClientBill::class , 'discount_products', 'product_id', 'bill_id')
             ->withPivot(['discount'])
             ->withTimestamps();
     }
-    
+
 
     public function prices()
     {
-        return $this->hasMany(Price::class, "product_id");
+        return $this->hasMany(Price::class , "product_id");
     }
 
     public function supplierBills()
     {
-        return $this->belongsToMany(SupplierBill::class, 'products_suppliers',"product_id",'bill_id')
+        return $this->belongsToMany(SupplierBill::class , 'products_suppliers', "product_id", 'bill_id')
             ->withPivot(['quantity', 'piece_price', 'price', 'notes', 'product_id', 'bill_id'])->withTimestamps();
     }
 
     public function productsSupplier()
     {
-        return $this->hasMany(SupplierProduct::class,"product_id");
+        return $this->hasMany(SupplierProduct::class , "product_id");
     }
 
     public function supplierBillsReturn()
     {
         $columns = ['quantity', 'piece_price', 'price', 'notes', 'product_id', 'bill_id'];
 
-        return $this->belongsToMany(SupplierBillReturn::class, 'products_suppliers_return',"product_id",'bill_id')
+        return $this->belongsToMany(SupplierBillReturn::class , 'products_suppliers_return', "product_id", 'bill_id')
             ->withPivot($columns)->withTimestamps();
 
     }
 
     public function productsStocks()
     {
-        return $this->hasMany(ProductStock::class,"product_id");
+        return $this->hasMany(ProductStock::class , "product_id");
     }
 
     /**
@@ -141,14 +152,14 @@ class Product extends Model
      */
     public function clientBills()
     {
-        return $this->belongsToMany(ClientBill::class, 'clients_products',"product_id",'bill_id')
-            ->withPivot(['quantity', 'piece_price','purchase_price', 'price','discount','stock_id','client_id'])
+        return $this->belongsToMany(ClientBill::class , 'clients_products', "product_id", 'bill_id')
+            ->withPivot(['quantity', 'piece_price', 'purchase_price', 'price', 'discount', 'stock_id', 'client_id'])
             ->withTimestamps();
     }
     public function returnedInvoices()
     {
-        return $this->belongsToMany(ClientBillReturn::class, 'products_clients_return',"product_id",'bill_id')
-            ->withPivot(['quantity', 'piece_price', 'price','stock_id','client_id'])
+        return $this->belongsToMany(ClientBillReturn::class , 'products_clients_return', "product_id", 'bill_id')
+            ->withPivot(['quantity', 'piece_price', 'price', 'stock_id', 'client_id'])
             ->withTimestamps();
     }
     /**
@@ -185,7 +196,7 @@ class Product extends Model
      */
     public function scopeName($query)
     {
-        return to_arabic_int($this->code) . " - $this->name ". $this->supplier->name;
+        return to_arabic_int($this->code) . " - $this->name " . $this->supplier->name;
     }
 
     /**
@@ -205,7 +216,7 @@ class Product extends Model
      */
     public function scopeNameSupplier($query)
     {
-        return "$this->name ". $this->supplier->name;
+        return "$this->name " . $this->supplier->name;
     }
     /**
      * count all product to get code of new product
@@ -236,7 +247,8 @@ class Product extends Model
      */
     public function scopeSalePrice($q)
     {
-        if ($stock = $this->stocks()->latest()->first()) return $stock->pivot->sale_price;
+        if ($stock = $this->stocks()->latest()->first())
+            return $stock->pivot->sale_price;
     }
-    
+
 }

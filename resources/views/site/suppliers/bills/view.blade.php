@@ -57,9 +57,9 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title float-left">@lang("balances.transactions")</h3>
-                    <a  class="btn btn-secondary" href="{{ route("ajax.suppliers.bills.print.transactions",$bill->id) }}">
+                    {{-- <a  class="btn btn-secondary" href="{{ route("ajax.suppliers.bills.print.transactions",$bill->id) }}">
                         <i class="fa fa-print"></i> @lang("home.print")
-                    </a>
+                    </a> --}}
 {{--                    <button class="btn btn-info float-right">@lang("balances.btn_paid")</button>--}}
                 </div>
                 <!-- /.card-header -->

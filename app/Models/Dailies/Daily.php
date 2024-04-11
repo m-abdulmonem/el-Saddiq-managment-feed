@@ -42,7 +42,7 @@ class Daily extends Model
             ->first();
     }
 
-    public function netSales()
+    public function scopeNetSales($q)
     {
         $payment = new Payments();
         $medicine = new MedicineSales();
@@ -50,8 +50,11 @@ class Daily extends Model
         $salary = new Salary();
 
         $payments = ($payment->today()->sum("paid") + $salary->today()->sum("salary") +  $salary->today()->sum("increase")  - $salary->today()->sum("discount"));
-        $sales = ($balance->today()->where("type","catch")->sum("paid")+ $medicine->today()->sum("price"));
+
+        $sales = ($balance->whereToday()->where("type","catch")->sum("paid")+ $medicine->today()->sum("price"));
+        
         return ($sales - $payments);
+
     }
 
     public function scopeCode($q)

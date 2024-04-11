@@ -57,7 +57,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title float-left">@lang("balances.clients")</h3>
-                    <a  class="btn btn-secondary" href="{{ route("ajax.client.print.balance",$bill->id) }}">
+                    <a  class="btn btn-secondary" href="{{ route("ajax.clients.print.balance",$bill->id) }}">
                         <i class="fa fa-print"></i> @lang("home.print")
                     </a>
                 </div>
@@ -214,7 +214,7 @@
                     {data: 'debtor', name: 'debtor'},
                     {data: 'date', name: 'date'}
                 ],
-                url: "{{ route("ajax.clients.invoices.returnedInvoices",$bill->id) }}",
+                url: "{{ route("ajax.clients.invoices.returned.invoices",$bill->id) }}",
                 notColumns: ['actions'],
                 actionColumnWidth: "250px"
             })

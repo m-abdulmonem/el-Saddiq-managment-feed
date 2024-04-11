@@ -22,6 +22,14 @@ class Salary extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function scopeToday()
+    {
+        return $this->whereDay("created_at",now()->format("d"))
+            ->whereMonth("created_at",now()->format("m"))
+            ->whereYear("created_at",now()->format("Y"))
+            ->first();
+    }
+
 //    public function scopeCreateWith($q,$data)
 //    {
 //        $create = $this->create(array_merge($data,['user_id' => auth()->id()]));

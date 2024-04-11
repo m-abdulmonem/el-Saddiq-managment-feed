@@ -323,7 +323,8 @@
                    {data: 'gain', name: 'gain'},
                    {data: 'loss', name: 'loss'},
                ],
-               url: "{{ route("ajax.chicks.index") }}",
+            //    url: " route('ajax.chicks.index') ",
+               url: "{{ url("") }}",
                data: {supplier: "{{ $supplier->id }}"}
            });
 
@@ -340,7 +341,8 @@
                    {data: 'loss', name: 'loss'},
                    {data: 'date', name: 'date'},
                ],
-               url: "{{ route("ajax.chick.orders.index") }}",
+            //    url: "route("ajax.chick.orders.index")",
+               url: "{{ url("") }}",
                data: {supplier: "{{$supplier->id}}"},
                actionColumnWidth : "350px"
            });

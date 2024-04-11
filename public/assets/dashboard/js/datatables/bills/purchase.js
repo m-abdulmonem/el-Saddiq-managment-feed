@@ -170,6 +170,8 @@ function calcTotal() {
     });
 
     $("#totalQuantity").val(totalQuantity);
+
+    $(".total-quantity-input").val(totalQuantity)
     // add the price to view in total-price class
     $(".net").text(`${$.number(price,2)} ج.م `);
     ////put total price to input hidden

@@ -7,11 +7,12 @@ use App\Models\Transactions\Payments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
-class Client extends Model 
+class Client extends Model
 {
 
-    use SoftDeletes;
+    use SoftDeletes,Searchable;
     public $timestamps = true;
 
     protected $table = 'clients';
@@ -19,6 +20,15 @@ class Client extends Model
     protected $fillable = ['code','name','picture','discount','address','phone','is_trader','maximum_repayment_period','credit_limit'];
 
 
+    public function toSearchableArray()
+{
+    return [
+        'name' => $this->name,
+        'phone' => $this->phone,
+        'address' => $this->address,
+        'discount' => $this->discount,
+    ];
+}
     /**
      * @return HasMany
      */

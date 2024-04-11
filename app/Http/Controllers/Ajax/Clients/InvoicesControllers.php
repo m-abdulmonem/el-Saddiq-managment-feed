@@ -166,7 +166,7 @@ class InvoicesControllers extends Controller
                 ->make(true);
         }//end if cond
     }
-    
+
     public function balances(InvoicesServices $invoice,Request $request)
     {
         if ($request->ajax()) {
@@ -219,6 +219,7 @@ class InvoicesControllers extends Controller
             'invoice' => $invoice,
         ];
 
+        return json($invoice->client->name());
 //        $pdf->loadView("$this->folder.print.invoice",$data)
 //            ->save("pdf/invoices/invoice_$invoice->code"."_".now()->format("Y-m-d_H-i-s").".pdf");
 
@@ -262,10 +263,10 @@ class InvoicesControllers extends Controller
                 ];
         return json($data);
     }
-    
+
     public function printLastInvoice()
     {
-        $route = route("ajax.client.print.invoice",InvoicesServices::latest()->first()->id);
+        $route = route("ajax.clients.print.invoice",InvoicesServices::latest()->first()->id);
         return jsonSuccess("",$route);
     }
 

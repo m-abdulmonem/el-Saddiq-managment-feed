@@ -2,27 +2,29 @@
 
 namespace App\Models;
 
-use App\Models\Chick\BookingChick;
-use App\Models\Client\ClientBalance;
-use App\Models\Client\ClientBill;
-use App\Models\Client\ClientBillReturn;
-use App\Models\Dailies\Daily;
-use App\Models\Product\Product;
-use App\Models\Product\ProductStock;
-use App\Models\Sms\SmsBodies;
-use App\Models\Supplier\SupplierBillReturn;
-use App\Models\Transactions\CatchPurchase;
-use App\Models\Transactions\Payments;
 use App\Models\User\Salary;
+use Illuminate\Support\Str;
+use App\Models\Dailies\Daily;
+use App\Models\Sms\SmsBodies;
+use App\Models\Product\Product;
+use App\Models\Client\ClientBill;
+use App\Models\Chick\BookingChick;
+use Laravel\Sanctum\HasApiTokens;
+use App\Models\Client\ClientBalance;
+use App\Models\Product\ProductStock;
+use App\Models\Transactions\Payments;
+use Spatie\Permission\Traits\HasRoles;
+use App\Models\Client\ClientBillReturn;
+use Illuminate\Notifications\Notifiable;
+use App\Models\Transactions\CatchPurchase;
+use App\Models\Supplier\SupplierBillReturn;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use Notifiable,HasRoles,SoftDeletes;
+    use Notifiable,HasRoles,SoftDeletes,HasApiTokens;
 
     public $timestamps = true;
 
@@ -32,12 +34,20 @@ class User extends Authenticatable
 
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['code','name','username','email','password','phone','address','picture','salary','salary_type','credit_limit','discount_limit','holidays','is_active','job_id'];
+    protected $fillable = ['code','name','username','email','password','phone','device_token','address','picture','salary','salary_type','credit_limit','discount_limit','holidays','is_active','job_id'];
 
 
     public function job()
     {
         return $this->belongsTo(Job::class);
+    }
+
+    public function scopeGenerateToken()
+    {
+        $this->device_token = Str::random(60);
+        $this->save();
+
+        return $this->device_token;
     }
 
     /**

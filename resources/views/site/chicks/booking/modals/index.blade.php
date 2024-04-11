@@ -1,6 +1,6 @@
 @push("css")
     <!-- Select2 -->
-    <link rel="stylesheet" href="{{ admin_assets("/css/select2.min.css") }}">
+    <link rel="stylesheet" href="{{ admin_assets("select2.min.css") }}">
 @endpush
 <div class="modal fade" id="chickBooking" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -92,8 +92,8 @@
 </div>
 @push("js")
     <!-- Select2 -->
-    <script src="{{ admin_assets("/js/select2.full.min.js") }}"></script>
-    <script src="{{ admin_assets("/js/lang/select2_ar.js") }}"></script>
+    <script src="{{ admin_assets("select2.full.min.js") }}"></script>
+    <script src="{{ admin_assets("lang/select2_ar.js") }}"></script>
     <script>
         let body = $("body"),modalTitle = $("#bookingModalTitle");
         $("#clientName").on("select2:select", function (e) {
@@ -120,7 +120,7 @@
         $(".btn-close,.close").click(function () {
             if ($("#ma-admin-datatable").length > 0) $(".btn-add").removeSpanner()
         });
-        
+
 
         body.on("click",".btn-update",function (e) {
             e.preventDefault();

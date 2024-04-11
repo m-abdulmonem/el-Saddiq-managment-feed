@@ -117,7 +117,7 @@ class ClientsController extends Controller
                 ->make(true);
         }//end if cond
     }
-    
+
     public function balances(ClientsServices $client,Request $request)
     {
         if ($request->ajax()) {
@@ -161,13 +161,13 @@ class ClientsController extends Controller
     {
         return json($client->chicksConsumptionGraph($request->start,$request->end));
     }
-    
+
     public function gainLossGraph(ClientsServices $client,Request $request)
     {
         return json($client->gainLossGraph($request->start,$request->end));
     }
-    
-    
+
+
     public function names(ClientsServices $clients)
     {
         $data = [];
@@ -235,7 +235,7 @@ class ClientsController extends Controller
         $perm =  user_can("update $this->perm") ? "btn-update" : "disabled";
         $trader = $data->is_trader ? "true" :"false";
         return "<button class='btn btn-info $perm'
-                        data-id='$data->id' 
+                        data-id='$data->id'
                         data-name='$data->name'
                         data-address='$data->address'
                         data-phone='$data->phone'

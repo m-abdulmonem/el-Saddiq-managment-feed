@@ -3,11 +3,11 @@
     @push("css")
         {!! datatable_files("css") !!}
         <!--  amsifysuggestags  -->
-        <link rel="stylesheet" href="{{ admin_assets('/css/amsify.suggestags.css') }}">
+        <link rel="stylesheet" href="{{ admin_assets('amsify.suggestags.css') }}">
         <!-- Select2 -->
-        <link rel="stylesheet" href="{{ admin_assets("/css/select2.min.css") }}">
+        <link rel="stylesheet" href="{{ admin_assets("select2.min.css") }}">
 
-        <link rel="stylesheet" href="{{ admin_assets("package/bootstrapDatepicker/css/bootstrap-datepicker.min.css") }}">
+        <link rel="stylesheet" href="{{ admin_assets(path: "bootstrapDatepicker/css/bootstrap-datepicker.min.css",fullPath: true) }}">
     @endpush
 
 {{--    {!! errors($errors) !!}--}}
@@ -226,16 +226,16 @@
         {!! datatable_files("js",false) !!}
         <script>let stocks = "{{ select_options_db(\App\Models\Stock::pluck("name","id"),'stock') }}";</script>
         <!-- numbers format -->
-        <script src="{{ admin_assets("/js/jquery.number.min.js") }}"></script>
+        <script src="{{ admin_assets("jquery.number.min.js") }}"></script>
         <!--  amsifysuggestags  -->
-        <script src="{{ admin_assets('/js/jquery.amsify.suggestags.js') }}"></script>
+        <script src="{{ admin_assets('jquery.amsify.suggestags.js') }}"></script>
         <!-- Select2 -->
-        <script src="{{ admin_assets("/js/select2.full.min.js") }}"></script>
-        <script src="{{ admin_assets("/js/lang/select2_ar.js") }}"></script>
+        <script src="{{ admin_assets("select2.full.min.js") }}"></script>
+        <script src="{{ admin_assets("lang/select2_ar.js") }}"></script>
         <!-- My Script -->
 
-        <script src="{{ admin_assets("/package/bootstrapDatepicker/js/bootstrap-datepicker.min.js") }}"></script>
-        <script src="{{ admin_assets("/package/bootstrapDatepicker/js/locales/bootstrap-datepicker.ar.min.js") }}"></script>
+        <script src="{{ admin_assets(path: "bootstrapDatepicker/js/bootstrap-datepicker.min.js",fullPath: true) }}"></script>
+        <script src="{{ admin_assets(path: "bootstrapDatepicker/js/locales/bootstrap-datepicker.ar.min.js",fullPath: true) }}"></script>
 
 
         <!-- plugging triggers -->
@@ -290,6 +290,6 @@
             }
         </script>
 
-        <script src="{{ admin_assets("/js/datatables/bills/purchase.js") }}"></script>
+        <script src="{{ admin_assets("datatables/bills/purchase.js") }}"></script>
     @endpush
 @endsection

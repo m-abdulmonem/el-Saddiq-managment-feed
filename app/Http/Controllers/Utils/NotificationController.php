@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 class NotificationController extends Controller
 {
 
+    public function __construct(protected string $token, protected string $key)
+    {
+
+    }
 
     public function send()
     {
@@ -15,7 +19,7 @@ class NotificationController extends Controller
     }
 
 
-    public function provider() : string
+    public function provider(): string
     {
 
         return $this->initProvider();
@@ -24,14 +28,16 @@ class NotificationController extends Controller
     public function initProvider(): string
     {
         $token = env("NOTIFY_TOKEN");
+
         $key = env("NOTIFY_KEY");
+
         return match (env('NOTIFY_PROVIDER')) {
-            "a" => "a",
-            "b" => "b",
-            "c" => "c",
-            "d" => "d",
-            default => "q",
-        };
+                "a" => "a",
+                "b" => "b",
+                "c" => "c",
+                "d" => "d",
+                default => "q",
+            };
     }
 
 

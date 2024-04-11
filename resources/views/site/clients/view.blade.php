@@ -274,7 +274,7 @@
                     $("#transactionsTable").DataTable().destroy();
                     transactions($("#select_type").val().replace("option_"),start,end);
                 });
-                
+
                 $("#invoiceType").change(function () {
                     $("#invoicesTable").DataTable().destroy();
                     invoices($(this).val())
@@ -344,7 +344,8 @@
                         {data: 'deposit', name: 'deposit'},
                         {data: 'status', name: 'status'},
                     ],
-                    url: "{{ route("ajax.booking.index") }}",
+                    // url: "route("ajax.booking.index")",
+                    url: "{{ url("ajax.booking.index") }}",
                     data: {status: status,client: "{{ $client->id }}"},
                     actionColumnWidth : "300px"
                 });
