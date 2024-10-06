@@ -113,7 +113,7 @@
     </form>
     <!-- /.row -->
     @push("js")
-        <script src="{{ admin_assets("/js/datatables/btn_delete.js") }}"></script>
+        <script src="{{ admin_assets("datatables/btn_delete.js") }}"></script>
         <script >btn_delete()</script>
     @endpush
 @endsection

@@ -2,7 +2,7 @@
 @section("content")
     @push("css")
         {!! datatable_files("css") !!}
-        <link rel="stylesheet" type="text/css" href="{{ admin_assets("css/daterangepicker.css") }}" />
+        <link rel="stylesheet" type="text/css" href="{{ admin_assets("daterangepicker.css") }}" />
     @endpush
     <div class="row">
         <div class="col-12">
@@ -76,9 +76,9 @@
 
     @push("js")
         {!! datatable_files() !!}
-        <script type="text/javascript" src="{{ admin_assets("/js/moment.min.js") }}"></script>
-        <script type="text/javascript" src="{{ admin_assets("js/daterangepicker.js") }}"></script>
-        <script type="text/javascript" src="{{ admin_assets("js/plugins/datepicker.js") }}"></script>
+        <script type="text/javascript" src="{{ admin_assets("moment.min.js") }}"></script>
+        <script type="text/javascript" src="{{ admin_assets("daterangepicker.js") }}"></script>
+        <script type="text/javascript" src="{{ admin_assets("plugins/datepicker.js") }}"></script>
         <script>
 
             $(function () {

@@ -41,11 +41,11 @@
 <!-- /.card -->
 
 @push("js")
-    <script src="{{ admin_assets("js/Chart.min.js") }}"></script>
-    <script type="text/javascript" src="{{ admin_assets("/js/moment.min.js") }}"></script>
-    <script type="text/javascript" src="{{ admin_assets("js/daterangepicker.js") }}"></script>
-    <script type="text/javascript" src="{{ admin_assets("js/plugins/datepicker.js") }}"></script>
-    <script type="text/javascript" src="{{ admin_assets("js/plugins/maChart.js") }}"></script>
+    <script src="{{ admin_assets("Chart.min.js") }}"></script>
+    <script type="text/javascript" src="{{ admin_assets("moment.min.js") }}"></script>
+    <script type="text/javascript" src="{{ admin_assets("daterangepicker.js") }}"></script>
+    <script type="text/javascript" src="{{ admin_assets("plugins/datepicker.js") }}"></script>
+    <script type="text/javascript" src="{{ admin_assets("plugins/maChart.js") }}"></script>
 
     <script>
         let chart = $("#chart"),
@@ -204,7 +204,7 @@
                 }
             });
         }
-        
+
         function bookingGraph(start = null,end = null) {
             ajaxApi({
                 url: "{{ route("ajax.clients.graph.booking",$client->id) }}",
@@ -231,7 +231,7 @@
             });
 
         }
-        
+
         function bookingQuantityGraph(start = null,end = null) {
             ajaxApi({
                 url: "{{ route("ajax.clients.graph.booking.quantity",$client->id) }}",

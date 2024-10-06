@@ -43,8 +43,8 @@
 
     @push("js")
         {!! datatable_files() !!}
-        <script src="{{ admin_assets("/js/datatables/dataTables.buttons.min.js") }}"></script>
-        <script src="{{ admin_assets("/js/datatables/buttons.print.min.js") }}"></script>
+        <script src="{{ admin_assets("datatables/dataTables.buttons.min.js") }}"></script>
+        <script src="{{ admin_assets("datatables/buttons.print.min.js") }}"></script>
         <script>
 
             $("#suppliersTable").table({

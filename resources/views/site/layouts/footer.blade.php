@@ -62,6 +62,17 @@
         })
     });
 
+    $('[data-dismiss="modal"]').on('click', function() {
+        // This will find the closest parent with class 'modal'
+        var modalParent = $(this).closest('.modal');
+
+        modalParent.modal('hide');
+    });
+    $(".modal").on("hidden.bs.modal", function () {
+        console.log('on modal closed')
+       $('.modal-backdrop').remove()
+    });
+
     // ""ajax.users.expired.notifications""
     // function notification(timeOut = false) {
     //     ajaxApi({

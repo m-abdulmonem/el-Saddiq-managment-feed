@@ -401,7 +401,7 @@ if (!function_exists('image')) {
         if ($get_img) {
             return (str_contains($name, 'images') || str_contains($name, 'companies_logo'))
                 ? asset('storage/' . $name)
-                : admin_assets("img/MAAdminLogo.png");
+                : admin_assets("MAAdminLogo.png");
         }
     }
 }
@@ -440,7 +440,7 @@ if (!function_exists("img")) {
     {
         return (str_contains($name, 'images') || str_contains($name, 'companies_logo'))
             ? asset('storage/' . $name)
-            : admin_assets("img/MAAdminLogo.png");
+            : admin_assets("MAAdminLogo.png");
     }
 }
 
