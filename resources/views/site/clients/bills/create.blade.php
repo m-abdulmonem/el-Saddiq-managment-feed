@@ -3,7 +3,7 @@
     @push("css")
         {!! datatable_files("css",false) !!}
         <!-- Select2 -->
-        <link rel="stylesheet" href="{{ admin_assets("/css/select2.min.css") }}">
+        <link rel="stylesheet" href="{{ admin_assets("select2.min.css") }}">
     @endpush
 
     {!! errors($errors) !!}
@@ -223,11 +223,11 @@
     @push("js")
         {!! datatable_files("js",false) !!}
         <!-- numbers format -->
-        <script src="{{ admin_assets("/js/jquery.number.min.js") }}"></script>
-        <script src="{{ admin_assets("/js/persianumber.min.js") }}"></script>
+        <script src="{{ admin_assets("jquery.number.min.js") }}"></script>
+        <script src="{{ admin_assets("persianumber.min.js") }}"></script>
         <!-- Select2 -->
-        <script src="{{ admin_assets("/js/select2.full.min.js") }}"></script>
-        <script src="{{ admin_assets("/js/lang/select2_ar.js") }}"></script>
+        <script src="{{ admin_assets("select2.full.min.js") }}"></script>
+        <script src="{{ admin_assets("lang/select2_ar.js") }}"></script>
 
         <!-- plugging triggers -->
         <script>
@@ -299,6 +299,6 @@
 
         </script>
         <!-- My Script -->
-        <script src="{{ admin_assets("/js/bills/clients.js") }}"></script>
+        <script src="{{ admin_assets("bills/clients.js") }}"></script>
     @endpush
 @endsection

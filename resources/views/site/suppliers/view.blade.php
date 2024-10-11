@@ -181,94 +181,94 @@
         </div>
         <!-- /.col -->
 
-        <!-- ./chicks -->
-        <div class="col-12 ">
-            <div class="card " >
-                <div class="card-header">
-                    <h3 class="card-title float-left">@lang("chicks/chicks.title")</h3>
-                    <button type="button" class="btn btn-info btn-print"><i class="fa fa-plus"></i> @lang("home.print")</button>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <table id="chicksTable" class="table table-bordered table-striped">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>@lang("chicks/chicks.name")</th>
-                            <th>@lang("chicks/chicks.price")</th>
-                            <th>@lang("chicks/chicks.sale_price")</th>
-                            <th>@lang("chicks/chicks.profit")</th>
-                            <th>@lang("chicks/chicks.total_quantity")</th>
-                            <th>@lang("balances.gain")</th>
-                            <th>@lang("balances.loss")</th>
-                            <th>@lang("home.actions")</th>
-                        </tr>
-                        </thead>
-                        <tbody id="bills">
+{{--        <!-- ./chicks -->--}}
+{{--        <div class="col-12 ">--}}
+{{--            <div class="card " >--}}
+{{--                <div class="card-header">--}}
+{{--                    <h3 class="card-title float-left">@lang("chicks/chicks.title")</h3>--}}
+{{--                    <button type="button" class="btn btn-info btn-print"><i class="fa fa-plus"></i> @lang("home.print")</button>--}}
+{{--                </div>--}}
+{{--                <!-- /.card-header -->--}}
+{{--                <div class="card-body">--}}
+{{--                    <table id="chicksTable" class="table table-bordered table-striped">--}}
+{{--                        <thead>--}}
+{{--                        <tr>--}}
+{{--                            <th>#</th>--}}
+{{--                            <th>@lang("chicks/chicks.name")</th>--}}
+{{--                            <th>@lang("chicks/chicks.price")</th>--}}
+{{--                            <th>@lang("chicks/chicks.sale_price")</th>--}}
+{{--                            <th>@lang("chicks/chicks.profit")</th>--}}
+{{--                            <th>@lang("chicks/chicks.total_quantity")</th>--}}
+{{--                            <th>@lang("balances.gain")</th>--}}
+{{--                            <th>@lang("balances.loss")</th>--}}
+{{--                            <th>@lang("home.actions")</th>--}}
+{{--                        </tr>--}}
+{{--                        </thead>--}}
+{{--                        <tbody id="bills">--}}
 
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col">
+{{--                        </tbody>--}}
+{{--                    </table>--}}
+{{--                </div>--}}
+{{--                <!-- /.card-body -->--}}
+{{--                <div class="card-footer">--}}
+{{--                    <div class="row">--}}
+{{--                        <div class="col">--}}
 {{--                            <h5>@lang("balances.creditor") <small> {{ currency(0) }} </small></h5>--}}
-                        </div>
-                    </div>
-                    <!-- ./row -->
-                </div>
-                <!-- /.card-footer -->
-            </div>
-            <!-- /.card -->
-        </div>
-        <!-- /.col -->
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <!-- ./row -->--}}
+{{--                </div>--}}
+{{--                <!-- /.card-footer -->--}}
+{{--            </div>--}}
+{{--            <!-- /.card -->--}}
+{{--        </div>--}}
+{{--        <!-- /.col -->--}}
 
-        <!-- ./orders -->
-        <div class="col-12 ">
-            <div class="card " >
-                <div class="card-header">
-                    <h3 class="card-title float-left">@lang("chicks/orders.title")</h3>
-                    <button type="button" class="btn btn-info btn-print"><i class="fa fa-plus"></i> @lang("home.print")</button>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <table id="ordersTable" class="table table-bordered table-striped">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>@lang("chicks/orders.name")</th>
-                            <th>@lang("chicks/orders.price")</th>
-                            <th>@lang("chicks/orders.purchase_price")</th>
-                            <th>@lang("chicks/orders.sale_price")</th>
-                            <th>@lang("chicks/orders.quantity")</th>
-                            <th>@lang("chicks/orders.status")</th>
+{{--        <!-- ./orders -->--}}
+{{--        <div class="col-12 ">--}}
+{{--            <div class="card " >--}}
+{{--                <div class="card-header">--}}
+{{--                    <h3 class="card-title float-left">@lang("chicks/orders.title")</h3>--}}
+{{--                    <button type="button" class="btn btn-info btn-print"><i class="fa fa-plus"></i> @lang("home.print")</button>--}}
+{{--                </div>--}}
+{{--                <!-- /.card-header -->--}}
+{{--                <div class="card-body">--}}
+{{--                    <table id="ordersTable" class="table table-bordered table-striped">--}}
+{{--                        <thead>--}}
+{{--                        <tr>--}}
+{{--                            <th>#</th>--}}
+{{--                            <th>@lang("chicks/orders.name")</th>--}}
+{{--                            <th>@lang("chicks/orders.price")</th>--}}
+{{--                            <th>@lang("chicks/orders.purchase_price")</th>--}}
+{{--                            <th>@lang("chicks/orders.sale_price")</th>--}}
+{{--                            <th>@lang("chicks/orders.quantity")</th>--}}
+{{--                            <th>@lang("chicks/orders.status")</th>--}}
 {{--                            <th>@lang("chicks/orders.chick")</th>--}}
-                            <th>@lang("chicks/orders.gain")</th>
-                            <th>@lang("chicks/orders.loss")</th>
-                            <th>@lang("chicks/orders.date")</th>
-                            <th>@lang("home.actions")</th>
-                        </tr>
-                        </thead>
-                        <tbody id="bills">
+{{--                            <th>@lang("chicks/orders.gain")</th>--}}
+{{--                            <th>@lang("chicks/orders.loss")</th>--}}
+{{--                            <th>@lang("chicks/orders.date")</th>--}}
+{{--                            <th>@lang("home.actions")</th>--}}
+{{--                        </tr>--}}
+{{--                        </thead>--}}
+{{--                        <tbody id="bills">--}}
 
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col">
+{{--                        </tbody>--}}
+{{--                    </table>--}}
+{{--                </div>--}}
+{{--                <!-- /.card-body -->--}}
+{{--                <div class="card-footer">--}}
+{{--                    <div class="row">--}}
+{{--                        <div class="col">--}}
 {{--                            <h5>@lang("balances.creditor") <small> {{ currency(0) }} </small></h5>--}}
-                        </div>
-                    </div>
-                    <!-- ./row -->
-                </div>
-                <!-- /.card-footer -->
-            </div>
-            <!-- /.card -->
-        </div>
-        <!-- /.col -->
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <!-- ./row -->--}}
+{{--                </div>--}}
+{{--                <!-- /.card-footer -->--}}
+{{--            </div>--}}
+{{--            <!-- /.card -->--}}
+{{--        </div>--}}
+{{--        <!-- /.col -->--}}
 
     </div>
     <!-- /.row -->

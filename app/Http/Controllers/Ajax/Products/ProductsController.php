@@ -191,7 +191,7 @@ class ProductsController extends Controller
                     'discount' => $product->discounts,
                     'quantity' => $product->stocks()->sum("quantity"),
                     'stocks' => $product->stocks()->pluck("stocks.name","stocks.id"),
-                    'price' => ($product->stocks()->latest()->first()->pivot->sale_price ?? 0),
+                    'price' => (float)($product->stocks()->latest()->first()->pivot->sale_price ?? 0),
                 ];
         return json($data);
     }
@@ -201,19 +201,19 @@ class ProductsController extends Controller
     private function btnChangePrice($data)
     {
         $perm =  user_can("update $this->perm") ? "btn-price-update" : "disabled";
-        return "<button class='btn btn-secondary $perm' 
-                        data-id='$data->id' 
+        return "<button class='btn btn-secondary $perm'
+                        data-id='$data->id'
                         data-price='{$data->latestPrice()}'
                         data-sale_price='{$data->salePrice()}'
                         title='".trans("$this->trans.update_price")."'><i class='fas fa-money-bill-alt'></i></button>";
     }
-    
+
 
     private function btnUpdate($data)
     {
         $perm =  user_can("update $this->perm") ? "btn-update" : "disabled";
         return "<button class='btn btn-info $perm'
-                        data-id='$data->id' 
+                        data-id='$data->id'
                         data-name='$data->name'
                         data-supplier_id='$data->supplier_id'
                         data-supplier_name='{$data->supplier->name}'

@@ -10,7 +10,7 @@ class BankChartsController extends Controller
 {
 
 
-    public function __construct(   protected $perm = "banks",Request $request)
+    public function __construct(   Request $request,protected $perm = "banks")
     {
         if (!$request->ajax()) {
             \abort(404);

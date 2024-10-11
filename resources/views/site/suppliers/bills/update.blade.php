@@ -3,13 +3,13 @@
     @push("css")
         {!! datatable_files("css",false) !!}
         <!--  amsifysuggestags  -->
-        <link rel="stylesheet" href="{{ admin_assets('/css/amsify.suggestags.css') }}">
+        <link rel="stylesheet" href="{{ admin_assets('amsify.suggestags.css') }}">
         <!-- Select2 -->
-        <link rel="stylesheet" href="{{ admin_assets("/css/select2.min.css") }}">
+        <link rel="stylesheet" href="{{ admin_assets("select2.min.css") }}">
         <!-- tostar -->
-        <link rel="stylesheet" href="{{ admin_assets("/css/toastr.min.css") }}">
+        <link rel="stylesheet" href="{{ admin_assets("toastr.min.css") }}">
 
-        <link rel="stylesheet" href="{{ admin_assets("package/bootstrapDatepicker/css/bootstrap-datepicker.min.css") }}">
+        <link rel="stylesheet" href="{{ admin_assets("bootstrapDatepicker/css/bootstrap-datepicker.min.css", fullPath: true) }}">
         <style>
             .sold-products input{
                 max-width: 100px!important;
@@ -264,13 +264,13 @@
         {!! datatable_files("js",false) !!}
         <script>let stocks = "{{ select_options_db($stocks,'stock') }}";</script>
         <!-- numbers format -->
-        <script src="{{ admin_assets("/js/jquery.number.min.js") }}"></script>
-        <script src="{{ admin_assets("/js/persianumber.min.js") }}"></script>
+        <script src="{{ admin_assets("jquery.number.min.js") }}"></script>
+        <script src="{{ admin_assets("persianumber.min.js") }}"></script>
         <!-- Select2 -->
-        <script src="{{ admin_assets("/js/select2.full.min.js") }}"></script>
-        <script src="{{ admin_assets("/js/lang/select2_ar.js") }}"></script>
-        <script src="{{ admin_assets("/package/bootstrapDatepicker/js/bootstrap-datepicker.min.js") }}"></script>
-        <script src="{{ admin_assets("/package/bootstrapDatepicker/js/locales/bootstrap-datepicker.ar.min.js") }}"></script>
+        <script src="{{ admin_assets("select2.full.min.js") }}"></script>
+        <script src="{{ admin_assets("lang/select2_ar.js") }}"></script>
+        <script src="{{ admin_assets("bootstrapDatepicker/js/bootstrap-datepicker.min.js", fullPath: true) }}"></script>
+        <script src="{{ admin_assets("bootstrapDatepicker/locales/bootstrap-datepicker.ar.min.js", fullPath: true) }}"></script>
 
         <script>
 
@@ -309,7 +309,7 @@
             })
         </script>
 
-        <script src="{{ admin_assets("/js/datatables/bills/purchase.js") }}"></script>
+        <script src="{{ admin_assets("datatables/bills/purchase.js") }}"></script>
 
 
     @endpush

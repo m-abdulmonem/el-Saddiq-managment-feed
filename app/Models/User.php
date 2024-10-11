@@ -185,4 +185,5 @@ class User extends Authenticatable
         return ($this->job->name === "مدير");
     }
 
+
 }

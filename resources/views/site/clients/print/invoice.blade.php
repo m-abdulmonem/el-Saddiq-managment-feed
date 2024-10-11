@@ -1,5 +1,6 @@
 @include("pdf.layouts.head")
 @include("pdf.layouts.header")
+
     <div class="text-center title">@lang("$trans.invoice")</div>
     <!-- info row -->
     <div class="row invoice-info">
@@ -151,7 +152,8 @@
 
 @push("js")
     window.onafterprint = function () {
-        window.location.href = "{{ back() }}"
+
+        window.location.href = "{{ filter_var(back(), FILTER_VALIDATE_URL) ? back() : url('daily') }}"
     };
 @endpush
 @include("pdf.layouts.footer")

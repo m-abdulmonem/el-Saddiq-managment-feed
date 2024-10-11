@@ -219,7 +219,7 @@ class InvoicesControllers extends Controller
             'invoice' => $invoice,
         ];
 
-        return json($invoice->client->name());
+//        return json($invoice->client->name());
 //        $pdf->loadView("$this->folder.print.invoice",$data)
 //            ->save("pdf/invoices/invoice_$invoice->code"."_".now()->format("Y-m-d_H-i-s").".pdf");
 

@@ -2,7 +2,7 @@
 @section("content")
     @push("css")
         {!! datatable_files("css") !!}
-        <link rel="stylesheet" type="text/css" href="{{ admin_assets("css/daterangepicker.css") }}" />
+        <link rel="stylesheet" type="text/css" href="{{ admin_assets("daterangepicker.css") }}" />
     @endpush
 
     <div class="row">

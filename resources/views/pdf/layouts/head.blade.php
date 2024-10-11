@@ -10,15 +10,15 @@
     <!-- Bootstrap 4 -->
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ admin_assets("css/all.min.css") }}">
+    <link rel="stylesheet" href="{{ admin_assets("all.min.css") }}">
     <!-- Ionicons -->
 {{--    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">--}}
 <!-- Theme style -->
-    <link rel="stylesheet" href="{{ admin_assets("css/adminlte.min.css") }}">
+    <link rel="stylesheet" href="{{ admin_assets("adminlte.min.css") }}">
 
     <!-- Bootstrap 4 RTL -->
-    <link rel="stylesheet" href="{{ admin_assets("/css/bootstrapRTL.min.css") }}">
-    <link rel="stylesheet" href=" {{  admin_assets("/css/rtl.css")  }} ">
+    <link rel="stylesheet" href="{{ admin_assets("bootstrapRTL.min.css") }}">
+    <link rel="stylesheet" href=" {{  admin_assets("rtl.css")  }} ">
 
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -41,7 +41,7 @@
         }
         body:after{
             content: "";
-            background: url("{{ admin_assets("img/logo.png") }}") center no-repeat;
+            background: url("{{ admin_assets("logo.png") }}") center no-repeat;
             opacity: 0.09;
             top: 0;
             left: 0;
@@ -58,7 +58,7 @@
             margin: 0 !important;
         }
         .page-header{
-            background: url("{{ admin_assets("img/logo.png") }}") no-repeat left top;
+            background: url("{{ admin_assets("logo.png") }}") no-repeat left top;
             background-size: contain;
             padding-bottom: 30px;
             margin-bottom: 30px;

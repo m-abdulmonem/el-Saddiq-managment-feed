@@ -10,7 +10,7 @@ class BanksController extends Controller
 {
 
 
-    public function __construct(protected $perm = "banks",Request $request)
+    public function __construct(Request $request,protected $perm = "banks")
     {
         if (!$request->ajax()) {
             \abort(404);
@@ -41,5 +41,28 @@ class BanksController extends Controller
         })
             ->rawColumns(['action'])
             ->make(true);
+    }
+
+    public function names()
+    {
+        $data = [];
+        foreach (Bank::pluck("name","id")->toArray() as $id => $name)
+            $data[] = ['id' => $id, 'text' => $name];
+        return json($data);
+    }
+
+    private function btnCharts($data)
+    {
+        return "<button class='btn btn-info btn-chart ' data-id='$data->id' data-name='$data->name' ><i class='fa fa-chart-bar'></i></button>";
+    }
+    private function btnUpdate($data)
+    {
+        $perm = user_can("read $this->perm") ? "btn-update" : "disabled";
+
+        return "<button class='btn btn-info $perm'
+                         data-id='$data->id'
+                         data-name='$data->name'
+                         data-address='$data->address'
+                         ><i class='fa fa-edit'></i></button>";
     }
 }

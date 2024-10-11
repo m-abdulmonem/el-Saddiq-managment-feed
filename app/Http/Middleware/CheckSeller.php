@@ -15,8 +15,9 @@ class CheckSeller
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->isSeller())
+        if (auth()->user()?->isSeller()){
             return redirect("daily");
+        }
         return $next($request);
     }
 }

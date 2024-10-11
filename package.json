@@ -13,7 +13,7 @@
         "postcss": "^8.1.14",
         "sass": "^1.32.11",
         "sass-loader": "^11.0.1",
-        "vite": "^3.0.2",
+        "vite": "^3.2.11",
         "vue": "^3.2.36",
         "vue-template-compiler": "^2.6.12"
     },

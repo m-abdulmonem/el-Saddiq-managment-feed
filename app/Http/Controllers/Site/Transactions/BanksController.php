@@ -60,7 +60,7 @@ class BanksController extends Controller
      */
     public function store(CreateRequest $request,Bank $bank)
     {
-        return $bank->createRecord($request->all());
+        return $bank->createWith($request->validated());
     }
 
     /**
@@ -94,7 +94,8 @@ class BanksController extends Controller
      */
     public function update(UpdateRequest $request, Bank $bank)
     {
-        return $bank->updateRecord($request->all());
+        $bank->update($request->validated());
+        return jsonSuccess(trans("home.alert_success_update_by",['name' => $bank->name]),$bank);
     }
 
     /**
@@ -106,6 +107,7 @@ class BanksController extends Controller
      */
     public function destroy(Bank $bank)
     {
-        return $bank->removeRecorder();
+        $bank->delete();
+        return jsonSuccess(trans("home.alert_success_delete",['name' => $bank->name]),$bank);
     }
 }

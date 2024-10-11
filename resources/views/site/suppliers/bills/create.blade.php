@@ -235,7 +235,7 @@
         <!-- My Script -->
 
         <script src="{{ admin_assets(path: "bootstrapDatepicker/js/bootstrap-datepicker.min.js",fullPath: true) }}"></script>
-        <script src="{{ admin_assets(path: "bootstrapDatepicker/js/locales/bootstrap-datepicker.ar.min.js",fullPath: true) }}"></script>
+        <script src="{{ admin_assets(path: "bootstrapDatepicker/locales/bootstrap-datepicker.ar.min.js",fullPath: true) }}"></script>
 
 
         <!-- plugging triggers -->

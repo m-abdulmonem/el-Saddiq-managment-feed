@@ -143,24 +143,27 @@
                 })
             },
             create(e){
-                let options = [], maxDiscount = parseFloat(e.target.getAttribute("profit"))/2;
+                let options = [];
+                let el = e.target.parentElement;
+                let maxDiscount = parseFloat(el.getAttribute("profit"))/2;
 
-                $.each(JSON.parse(e.target.getAttribute("stocks")),function (k,v) {
+
+                $.each(JSON.parse(el.getAttribute("stocks")),function (k,v) {
                     options.push(`<option value="${k}">${v}</option>`);
                 });
 
-                let html = `<tr class="product-${e.target.getAttribute("id")}">`;
-                        html += `<th>${e.target.getAttribute("num")}</th>`;
-                        html += `<td>${e.target.getAttribute("code")}</td>`;
-                        html += `<td><input type="hidden" class="id" name="products[]" value="${e.target.getAttribute("id")}">${e.target.getAttribute("name")}</td>`;
+                let html = `<tr class="product-${el.getAttribute("id")}">`;
+                        html += `<th>${el.getAttribute("num")}</th>`;
+                        html += `<td>${el.getAttribute("code")}</td>`;
+                        html += `<td><input type="hidden" class="id" name="products[]" value="${el.getAttribute("id")}">${el.getAttribute("name")}</td>`;
                         html += `<td><select name="stock_id[]" id="stocks" class="form-control">${options.join()}</select></td>`;
-                        html += `<td><input type="number" class="form-control quantity" style="width: 80px" max="${parseInt(e.target.getAttribute("quantity"))}" name="quantity[]" profit="${e.target.getAttribute("profit")}" discount="${e.target.getAttribute("discount") ?? 1}" price="${e.target.getAttribute("price")}" value="1"></td>`;
-                        html += `<td>${e.target.getAttribute("quantity")}</td>`;
-                        html += `<td><input type="hidden" value="${e.target.getAttribute("price")}" name="unitPrice[]">${formatter.format(e.target.getAttribute("price"))}</td>`;
-                        html += `<td>${parseInt(e.target.getAttribute("admin")) === 1 ? '<input type="number" step="any" style="width: 80px" name="product_discount" max="'+ maxDiscount +'"  class="form-control product-discount">' :formatter.format(0)}</td>`;
-                        html += `<td><input type="hidden" class="priceInput" name="price[]" value="${e.target.getAttribute("price")}"><span class="price">${formatter.format(e.target.getAttribute("price"))}</span></td>`;
-                        html += `<td><input type="hidden" class="netInput" name="net[]" value="${e.target.getAttribute("price")}"><span class="net">${formatter.format(e.target.getAttribute("price"))}</span></td>`;
-                        html += `<td><span id="product-${e.target.getAttribute("id")}" class="btn btn-danger btn-remove"><i class="fa fa-times"></i></span></td>`;
+                        html += `<td><input type="number" class="form-control quantity" style="width: 80px" max="${parseInt(el.getAttribute("quantity"))}" name="quantity[]" profit="${el.getAttribute("profit")}" discount="${el.getAttribute("discount") ?? 1}" price="${el.getAttribute("price")}" value="1"></td>`;
+                        html += `<td>${el.getAttribute("quantity")}</td>`;
+                        html += `<td><input type="hidden" value="${el.getAttribute("price")}" name="unitPrice[]">${formatter.format(el.getAttribute("price"))}</td>`;
+                        html += `<td>${parseInt(el.getAttribute("admin")) === 1 ? '<input type="number" step="any" style="width: 80px" name="product_discount" max="'+ maxDiscount +'"  class="form-control product-discount">' :formatter.format(0)}</td>`;
+                        html += `<td><input type="hidden" class="priceInput" name="price[]" value="${el.getAttribute("price")}"><span class="price">${formatter.format(el.getAttribute("price"))}</span></td>`;
+                        html += `<td><input type="hidden" class="netInput" name="net[]" value="${el.getAttribute("price")}"><span class="net">${formatter.format(el.getAttribute("price"))}</span></td>`;
+                        html += `<td><span id="product-${el.getAttribute("id")}" class="btn btn-danger btn-remove"><i class="fa fa-times"></i></span></td>`;
                 html += '<tr>';
                 $("#productsTable").append(html);
                 this.total();
@@ -168,7 +171,7 @@
                 $(".search-list").hide().prev().val("");
                 $(".btn-paid").data("returned",false);
                 if ( this.prices >= parseFloat($("#credit").val()))
-                    $(`.products-${e.target.getAttribute("id")}`)
+                    $(`.products-${el.getAttribute("id")}`)
 
             }
         }
