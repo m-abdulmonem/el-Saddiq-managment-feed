@@ -40,7 +40,7 @@ class PurchasesReceiptsController extends Controller
                 })
                 ->addColumn("percentage",function ($data){
                     $percentage = (removeMines($data->invoices->totalPaid()) * 100) / $data->invoices->price;
-                    return  $this->percentage(intval($percentage));
+                    return intval($percentage);
                 })
                 ->addColumn("date",function ($data){
                     return $data->created_at->format("Y-m-d h:i:s");

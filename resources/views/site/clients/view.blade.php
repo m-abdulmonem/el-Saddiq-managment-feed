@@ -207,48 +207,48 @@
             <!-- /.card -->
         </div>
         <!-- /.col -->
-        <!-- booking -->
-        <div class="col-12">
+{{--        <!-- booking -->--}}
+{{--        <div class="col-12">--}}
 
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title float-left">@lang("chicks/booking.title")</h3>
-                    @can("create client")
-                        <button class="btn btn-primary btn-add" data-toggle="modal" data-target="#chickBooking">
-                            <i class="fa fa-plus"></i> @lang("home.new")
-                        </button>
-                    @endcan
-                    <button class="btn btn-secondary btn-refresh"  type="button"><a ><i class="fa fa-redo-alt"></i> @lang("home.refresh")</a></button>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <div class="form-inline mb-3">
-                        <label for="select_status">@lang("chicks/booking.select_status")</label>
-                        <select name="" id="select_status" class="form-control">
-                            {!! select_options([null,1,0],null,"false",$trans) !!}
-                        </select>
-                    </div>
-                    <table id="bookingTable" class="table table-bordered table-striped" >
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>@lang("clients.name")</th>
-                            <th>@lang("clients.phone")</th>
-                            <th>@lang("chicks/chicks.name")</th>
-                            <th>@lang("chicks/orders.quantity")</th>
-                            <th>@lang("chicks/booking.deposit")</th>
-                            <th>@lang("chicks/orders.status")</th>
-                            <th>@lang("home.actions")</th>
-                        </tr>
-                        </thead>
+{{--            <div class="card">--}}
+{{--                <div class="card-header">--}}
+{{--                    <h3 class="card-title float-left">@lang("chicks/booking.title")</h3>--}}
+{{--                    @can("create client")--}}
+{{--                        <button class="btn btn-primary btn-add" data-toggle="modal" data-target="#chickBooking">--}}
+{{--                            <i class="fa fa-plus"></i> @lang("home.new")--}}
+{{--                        </button>--}}
+{{--                    @endcan--}}
+{{--                    <button class="btn btn-secondary btn-refresh"  type="button"><a ><i class="fa fa-redo-alt"></i> @lang("home.refresh")</a></button>--}}
+{{--                </div>--}}
+{{--                <!-- /.card-header -->--}}
+{{--                <div class="card-body">--}}
+{{--                    <div class="form-inline mb-3">--}}
+{{--                        <label for="select_status">@lang("chicks/booking.select_status")</label>--}}
+{{--                        <select name="" id="select_status" class="form-control">--}}
+{{--                            {!! select_options([null,1,0],null,"false",$trans) !!}--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                    <table id="bookingTable" class="table table-bordered table-striped" >--}}
+{{--                        <thead>--}}
+{{--                        <tr>--}}
+{{--                            <th>#</th>--}}
+{{--                            <th>@lang("clients.name")</th>--}}
+{{--                            <th>@lang("clients.phone")</th>--}}
+{{--                            <th>@lang("chicks/chicks.name")</th>--}}
+{{--                            <th>@lang("chicks/orders.quantity")</th>--}}
+{{--                            <th>@lang("chicks/booking.deposit")</th>--}}
+{{--                            <th>@lang("chicks/orders.status")</th>--}}
+{{--                            <th>@lang("home.actions")</th>--}}
+{{--                        </tr>--}}
+{{--                        </thead>--}}
 
-                    </table>
-                </div>
-                <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-        </div>
-        <!-- /.col -->
+{{--                    </table>--}}
+{{--                </div>--}}
+{{--                <!-- /.card-body -->--}}
+{{--            </div>--}}
+{{--            <!-- /.card -->--}}
+{{--        </div>--}}
+{{--        <!-- /.col -->--}}
 
     </div>
     <!-- /.row -->

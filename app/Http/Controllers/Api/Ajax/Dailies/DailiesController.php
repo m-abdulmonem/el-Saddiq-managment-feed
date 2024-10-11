@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 
 class DailiesController extends Controller
 {
+    protected $perm = "daily";
     /**
      * Handle the incoming request.
      *
@@ -37,11 +38,11 @@ class DailiesController extends Controller
             return currency($data->net_sales);
         })
             ->addColumn('action', function ($data) {
-        //                $btn = $this->btnPaidSalary($data);
-//                $btn .= btn_view($this->perm,"users",$data);
+//                        $btn = $this->btnPaidSalary($data);
+//                $btn = btn_view($this->perm,"users",$data);
 //                $btn .= btn_update($this->perm,"users",$data);
 //                $btn .= btn_delete($this->perm,"users",$data);
-        //                return $btn;
+//                        return $btn;
         })
             ->rawColumns(['action', 'user'])
             ->make(true);
@@ -50,7 +51,7 @@ class DailiesController extends Controller
     private function user($data)
     {
         $href = route("users.show", $data->user->id);
-        
+
         return "<a class='btn btn-link info-color' href='$href'>{$data->user->name()}</a>";
     }
 }

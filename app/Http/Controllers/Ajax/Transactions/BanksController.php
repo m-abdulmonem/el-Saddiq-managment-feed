@@ -65,18 +65,18 @@ class BanksController extends Controller
         return json($data);
     }
 
-    // private function btnCharts($data)
-    // {
-    //     return "<button class='btn btn-info btn-chart ' data-id='$data->id' data-name='$data->name' ><i class='fa fa-chart-bar'></i></button>";
-    // }
-    // private function btnUpdate($data)
-    // {
-    //     $perm = user_can("read $this->perm") ? "btn-update" : "disabled";
+     private function btnCharts($data)
+     {
+         return "<button class='btn btn-info btn-chart ' data-id='$data->id' data-name='$data->name' ><i class='fa fa-chart-bar'></i></button>";
+     }
+     private function btnUpdate($data)
+     {
+         $perm = user_can("read $this->perm") ? "btn-update" : "disabled";
 
-    //     return "<button class='btn btn-info $perm'
-    //                     data-id='$data->id'
-    //                     data-name='$data->name'
-    //                     data-address='$data->address'
-    //                     ><i class='fa fa-edit'></i></button>";
-    // }
+         return "<button class='btn btn-info $perm'
+                         data-id='$data->id'
+                         data-name='$data->name'
+                         data-address='$data->address'
+                         ><i class='fa fa-edit'></i></button>";
+     }
 }

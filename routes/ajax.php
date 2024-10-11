@@ -215,7 +215,7 @@ Route::group([], function () {
 
     //stocks
     Route::group(['prefix' => 'stocks', 'as' => 'ajax.stocks.', 'middleware' => ['permission:read stock']], function () {
-        Route::get("/", [StocksController::class])->name("index");
+        Route::get("/", [StocksController::class,'index'])->name("index");
         Route::get("/list", [StocksController::class, "list"])->name("list");
         Route::get("/names", [StocksController::class, "names"])->name("names");
 
@@ -225,15 +225,12 @@ Route::group([], function () {
             Route::get("consumption/{stock}", [StocksController::class,"consumptionGraph"])->name("graph.consumption");
             Route::get("products/{stock}", [StocksController::class,"productsGraph"])->name("graph.products");
             Route::get("location/{stock}", [StocksController::class,"locationsGraph"])->name("graph.location");
-        }
-        );
+        } );
 
         Route::group(['prefix' => 'print'], function () {
-            Route::get("stocktaking/{stock}", "StocksController@stocktaking")->name("print.stocktaking");
-        }
-        );
-    }
-    );
+            Route::get("stocktaking/{stock}", [StocksController::class,"stocktaking"])->name("print.stocktaking");
+        });
+    });
 
     //users
     Route::group(['prefix' => 'users',  'middleware' => ['permission:read user']], function () {
@@ -280,9 +277,9 @@ Route::group([], function () {
             Route::get("/", [BillsController::class, 'index'])->name("index");
             Route::get("/balances/{bill}", [BillsController::class, 'balances'])->name("balances");
             Route::get("/products/{bill}", [BillsController::class, 'products'])->name("products");
-            Route::get("returned/products/{bill}", "BillsController@returnedProducts")->name("returned.products");
+            Route::get("returned/products/{bill}", [BillsController::class,"returnedProducts"])->name("returned.products");
             Route::get("names/", [BillsController::class, 'names'])->name("names");
-            Route::get("returned/codes", "BillsController@codes")->name("returned.codes");
+            Route::get("returned/codes", [BillsController::class,"codes"])->name("returned.codes");
         }
         );
 
@@ -327,10 +324,10 @@ Route::group([], function () {
 
 
         Route::group(['prefix' => 'banks', 'as' => 'banks.'], function () {
-            Route::get("/", BanksController::class)->name("index");
+            Route::get("/",BanksController::class)->name("index");
             Route::get("names", Select2BanksController::class)->name("names");
             Route::get("charts/{bank?}", BankChartsController::class)->name("charts");
-            Route::get("print/{bank?}", "BanksController@print")->name("print");
+            Route::get("print/{bank?}", [BanksController::class,"print"])->name("print");
         }
         );
     }
