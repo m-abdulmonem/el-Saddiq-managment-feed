@@ -54,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
 
         ChickOrder::observe(ChickOrderObserver::class);
 
-        bookingServices::observe(BookingObserver::class);
+        // bookingServices::observe(BookingObserver::class);
 
         BillServices::observe(BillsObserver::class);
 
