@@ -43,7 +43,7 @@ class DailliesControler extends Controller
             $daily->create([
                 'number' => $daily->code(),
                 'time_in' => now(),
-                'user_id' => \auth()->id()
+                'user_id' => \auth()->id() ?: 1
             ]);
     }
 }
