@@ -2,10 +2,10 @@
 @section("content")
     @push("css")
         <!-- fullCalendar -->
-        <link rel="stylesheet" href="{{ admin_assets("/package/fullCalendar/fullcalendar/main.min.css") }}">
-        <link rel="stylesheet" href="{{ admin_assets("/package/fullCalendar/fullcalendar-daygrid/main.min.css") }}">
-        <link rel="stylesheet" href="{{ admin_assets("/package/fullCalendar/fullcalendar-timegrid/main.min.css") }}">
-        <link rel="stylesheet" href="{{ admin_assets("/package/fullCalendar/fullcalendar-bootstrap/main.min.css") }}">
+        <link rel="stylesheet" href="{{ admin_assets("fullCalendar/fullcalendar/main.min.css",fullPath: true) }}">
+        <link rel="stylesheet" href="{{ admin_assets("fullCalendar/fullcalendar-daygrid/main.min.css",fullPath: true) }}">
+        <link rel="stylesheet" href="{{ admin_assets("fullCalendar/fullcalendar-timegrid/main.min.css",fullPath: true) }}">
+        <link rel="stylesheet" href="{{ admin_assets("fullCalendar/fullcalendar-bootstrap/main.min.css",fullPath: true) }}">
     @endpush
     <div class="row">
         <div class="col-md-12">
@@ -23,13 +23,13 @@
     <!-- /.row -->
 
     @push("js")
-        <script src="{{ admin_assets("/js/jquery-ui.min.js") }}"></script>
+        <script src="{{ admin_assets("jquery-ui.min.js") }}"></script>
         <!-- fullCalendar 2.2.5 -->
-        <script src="{{ admin_assets("/js/moment/moment.min.js") }}"></script>
-        <script src="{{ admin_assets("/package/fullCalendar/fullcalendar/main.min.js") }}"></script>
-        <script src="{{ admin_assets("/package/fullCalendar/fullcalendar/locales/ar.js") }}"></script>
-        <script src="{{ admin_assets("/package/fullCalendar/fullcalendar-daygrid/main.min.js") }}"></script>
-        <script src="{{ admin_assets("/package/fullCalendar/fullcalendar-timegrid/main.min.js") }}"></script>
+        <script src="{{ admin_assets("moment/moment.min.js") }}"></script>
+        <script src="{{ admin_assets("fullCalendar/fullcalendar/main.min.js",fullPath: true) }}"></script>
+        <script src="{{ admin_assets("fullCalendar/fullcalendar/locales/ar.js",fullPath: true) }}"></script>
+        <script src="{{ admin_assets("fullCalendar/fullcalendar-daygrid/main.min.js",fullPath: true) }}"></script>
+        <script src="{{ admin_assets("fullCalendar/fullcalendar-timegrid/main.min.js",fullPath: true) }}"></script>
         <!-- Page specific script -->
         <script>
             $(function () {

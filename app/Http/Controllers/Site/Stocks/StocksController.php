@@ -32,7 +32,7 @@ class StocksController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return
      */
     public function index()
     {

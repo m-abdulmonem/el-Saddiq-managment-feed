@@ -1,6 +1,10 @@
 <?php
 
 
+use App\Http\Controllers\Ajax\Categories\CategoriesController;
+use App\Http\Controllers\Ajax\Jobs\JobsController;
+use App\Http\Controllers\Ajax\Products\MedicinesController;
+use App\Http\Controllers\Ajax\Users\UsersControllers;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Ajax\Stocks\StocksController;
 use App\Http\Controllers\Ajax\Clients\ClientsController;
@@ -116,9 +120,9 @@ Route::group([], function () {
         //print
         Route::group(['prefix' => 'print', 'as' => 'print.'], function () {
             Route::get("/invoice/{invoice}", [InvoicesControllers::class, 'printInvoice'])->name("invoice");
-            Route::get("/invoice", "InvoicesControllers@printLastInvoice")->name("last.invoice");
-            Route::get("/returned/invoice/{invoice}", "InvoicesControllers@printInvoice")->name("returned.invoice");
-            Route::get("/invoice/balance/{invoice}", "InvoicesControllers@printInvoice")->name("balance");
+            Route::get("/invoice", [InvoicesControllers::class,"printLastInvoice"])->name("last.invoice");
+            Route::get("/returned/invoice/{invoice}", [InvoicesControllers::class,"printInvoice"])->name("returned.invoice");
+            Route::get("/invoice/balance/{invoice}", [InvoicesControllers::class,"printInvoice"])->name("balance");
         });
 
         Route::controller(ClientsController::class)->group(function () {
@@ -174,10 +178,10 @@ Route::group([], function () {
 
 
         Route::group(['prefix' => 'medicines', 'as' => 'medicines.'], function () {
-            Route::get("/", "MedicinesController@index")->name("index");
-            Route::put("/purchases/", "MedicinesController@purchases")->name("purchases");
-            Route::put("/sell", "MedicinesController@sell")->name("sell");
-            Route::get("/search", "MedicinesController@search")->name("search");
+            Route::get("/", [MedicinesController::class,"index"])->name("index");
+            Route::put("/purchases/", [MedicinesController::class,"purchases"])->name("purchases");
+            Route::put("/sell", [MedicinesController::class,"sell"])->name("sell");
+            Route::get("/search", [MedicinesController::class,"search"])->name("search");
         }
         );
 
@@ -215,12 +219,12 @@ Route::group([], function () {
         Route::get("/list", [StocksController::class, "list"])->name("list");
         Route::get("/names", [StocksController::class, "names"])->name("names");
 
-        Route::put("product/{pivot}/move", "StocksController@move")->name("product.move");
+        Route::put("product/{pivot}/move", [StocksController::class,"move"])->name("product.move");
 
         Route::group(['prefix' => 'charts'], function () {
-            Route::get("consumption/{stock}", "StocksController@consumptionGraph")->name("graph.consumption");
-            Route::get("products/{stock}", "StocksController@productsGraph")->name("graph.products");
-            Route::get("location/{stock}", "StocksController@locationsGraph")->name("graph.location");
+            Route::get("consumption/{stock}", [StocksController::class,"consumptionGraph"])->name("graph.consumption");
+            Route::get("products/{stock}", [StocksController::class,"productsGraph"])->name("graph.products");
+            Route::get("location/{stock}", [StocksController::class,"locationsGraph"])->name("graph.location");
         }
         );
 
@@ -232,24 +236,24 @@ Route::group([], function () {
     );
 
     //users
-    Route::group(['prefix' => 'users', 'namespace' => 'Users', 'middleware' => ['permission:read user']], function () {
-        Route::get("/", "UsersControllers@index")->name("ajax.users.index");
-        Route::post("attendance/{user}", "UsersControllers@attendance")->name("ajax.users.attendance");
-        Route::put("departure/{user}", "UsersControllers@departure")->name("ajax.users.departure");
+    Route::group(['prefix' => 'users',  'middleware' => ['permission:read user']], function () {
+        Route::get("/", [UsersControllers::class,"index"])->name("ajax.users.index");
+        Route::post("attendance/{user}", [UsersControllers::class,"attendance"])->name("ajax.users.attendance");
+        Route::put("departure/{user}", [UsersControllers::class,"departure"])->name("ajax.users.departure");
 
-        Route::put("/mark/notification/{notify}", "UsersControllers@markNotification")->name("ajax.users.mark");
-        Route::get("expired/notifications", "UsersControllers@notifications")->name("ajax.users.expired.notifications");
+        Route::put("/mark/notification/{notify}", [UsersControllers::class,"markNotification"])->name("ajax.users.mark");
+        Route::get("expired/notifications", [UsersControllers::class,"notifications"])->name("ajax.users.expired.notifications");
 
         Route::group(['prefix' => 'balances'], function () {
-            Route::get("client/{user}", "UsersControllers@clientBalances")->name("ajax.users.balances.client");
-            Route::get("supplier/{user}", "UsersControllers@supplierBalances")->name("ajax.users.balances.supplier");
+            Route::get("client/{user}", [UsersControllers::class,"clientBalances"])->name("ajax.users.balances.client");
+            Route::get("supplier/{user}", [UsersControllers::class,"supplierBalances"])->name("ajax.users.balances.supplier");
         }
         );
     }
     );
     //jobs
-    Route::group(['prefix' => 'jobs', 'namespace' => 'Jobs', 'middleware' => ['permission:read job']], function () {
-        Route::get("/", "JobsController@index")->name("ajax.jobs.index");
+    Route::group(['prefix' => 'jobs',  'middleware' => ['permission:read job']], function () {
+        Route::get("/", [JobsController::class,"index"])->name("ajax.jobs.index");
     }
     );
 
@@ -264,11 +268,11 @@ Route::group([], function () {
             Route::get("quantity/{supplier}", [SuppliersController::class, 'quantityGraph'])->name("graph.quantity");
             Route::get("bills/{supplier}", [SuppliersController::class, 'billsGraph'])->name("graph.bills");
 
-            Route::get("products/{supplier}", 'SuppliersController@productsGraph')->name("graph.products");
-            Route::get("chicks/quantity/{supplier}", 'SuppliersController@chicksQuantityGraph')->name("graph.chicks.quantity");
-            Route::get("chicks/{supplier}", 'SuppliersController@chicksGraph')->name("graph.chicks");
-            Route::get("orders/{supplier}", 'SuppliersController@ordersGraph')->name("graph.orders");
-            Route::get("income/statement/{supplier}", 'SuppliersController@incomeStatementGraph')->name("graph.income.statement");
+            Route::get("products/{supplier}", [SuppliersController::class,'productsGraph'])->name("graph.products");
+            Route::get("chicks/quantity/{supplier}", [SuppliersController::class,'chicksQuantityGraph'])->name("graph.chicks.quantity");
+            Route::get("chicks/{supplier}", [SuppliersController::class,'chicksGraph'])->name("graph.chicks");
+            Route::get("orders/{supplier}", [SuppliersController::class,'ordersGraph'])->name("graph.orders");
+            Route::get("income/statement/{supplier}", [SuppliersController::class,'incomeStatementGraph'])->name("graph.income.statement");
         }
         );
         //bills
@@ -284,7 +288,7 @@ Route::group([], function () {
 
         Route::group(['prefix' => 'print'], function () {
 
-            Route::get("transaction/{bill}", "BillsController@printTransaction")->name("print.transactions");
+            Route::get("transaction/{bill}", [BillsController::class,"printTransaction"])->name("print.transactions");
         }
         );
 
@@ -343,6 +347,5 @@ Route::group([], function () {
         }
         )->name("logout");
 
-    }
-    );
+    }  );
 });
