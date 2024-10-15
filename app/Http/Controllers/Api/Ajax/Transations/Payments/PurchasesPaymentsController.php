@@ -10,6 +10,7 @@ use App\Services\Supplier\Bills\BillServices;
 
 class PurchasesPaymentsController extends Controller
 {
+    protected $trans = "transactions/expenses";
     /**
      * Handle the incoming request.
      *

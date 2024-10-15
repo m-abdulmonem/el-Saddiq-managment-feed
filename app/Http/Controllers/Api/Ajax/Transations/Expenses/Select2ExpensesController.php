@@ -8,28 +8,31 @@ use App\Models\Transactions\Expenses;
 
 class Select2ExpensesController extends Controller
 {
-    public function __construct(Request $request ,protected $trans = "transactions/expenses", protected $perm = "banks")
-    {
-        if (!$request->ajax()) {
-            \abort(404);
-        }
-    }
+    protected $trans = "transactions/expenses";
+    protected $perm = "banks";
+//    public function __construct(Request $request ,protected $trans = "transactions/expenses", protected $perm = "banks")
+//    {
+//        if (!$request->ajax()) {
+//            \abort(404);
+//        }
+//    }
 
     /**
      * Handle the incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return
      */
     public function __invoke(Request $request)
     {
         $callback = function ($expense) {
+
             return [
             'id' => $expense->id,
             'text' => $expense->name,
             ];
         };
 
-        return json(Expenses::pluck("name", "id")->map($callback)->toArray());
+        return json(Expenses::all()->map($callback)->toArray());
     }
 }
