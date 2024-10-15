@@ -8,7 +8,7 @@ use App\Models\Transactions\Expenses;
 
 class Select2ExpensesController extends Controller
 {
-    public function __construct(protected $trans = "transactions/expenses", protected $perm = "banks", Request $request)
+    public function __construct(Request $request ,protected $trans = "transactions/expenses", protected $perm = "banks")
     {
         if (!$request->ajax()) {
             \abort(404);
