@@ -129,6 +129,8 @@ class ProductsController extends Controller
      */
     public function destroy(Product $product)
     {
-        return $product->removeRecorder();
+        $data = $product->delete();
+
+        return jsonSuccess(trans('home.alert_delete', ['name' => $product->name]),$product);
     }
 }
