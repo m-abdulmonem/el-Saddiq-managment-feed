@@ -67,7 +67,11 @@ class CategoriesController extends Controller
      */
     public function store(CreateRequest $request)
     {
-        return $this->category->createRecord($request->all());
+
+        $category = Category::create($request->validated());
+
+        return jsonSuccess(trans("home.alert_success_create",['name' => $category->name]), $category);
+//        return $this->category->createRecord($request->all());
     }
 
     /**
@@ -101,7 +105,10 @@ class CategoriesController extends Controller
      */
     public function update(UpdateRequest $request, Category $category)
     {
-        return $category->updateRecord($request->all());
+        $category = $category->update($request->validated());
+
+        return jsonSuccess(trans("home.alert_success_update"), $category);
+//        return $category->updateRecord($request->all());
     }
 
     /**
