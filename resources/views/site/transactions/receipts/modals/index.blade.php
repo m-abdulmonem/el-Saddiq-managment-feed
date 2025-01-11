@@ -97,13 +97,13 @@
 
                 switch ($(this).val()) {
                     case "invoices":
-                        $('invoices-list').addClass('show').removeClass('hide')
-                        $('clients-list').addClass('hide').removeClass('show')
+                        $('.invoices-list').addClass('show').removeClass('hide')
+                        $('.clients-list').addClass('hide').removeClass('show')
                         invoices();
                         break;
                     case "clients":
-                        $('invoices-list').addClass('hide').removeClass('show')
-                        $('clients-list').addClass('show').removeClass('hide')
+                        $('.invoices-list').addClass('hide').removeClass('show')
+                        $('.clients-list').addClass('show').removeClass('hide')
                         clients();
                         break;
                     // default :
