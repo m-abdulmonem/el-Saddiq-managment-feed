@@ -16,7 +16,7 @@ class ReturnedPaymentsController extends Controller
     {
 
     }
-    
+
     /**
      * Handle the incoming request.
      *
@@ -66,7 +66,7 @@ class ReturnedPaymentsController extends Controller
     {
         if (($bill = $this->clientBill($data)) && $property) {
 
-            return $bill->invoices()->latest()->first()->$property;
+            return $bill->invoices()->latest()->first()?->$property;
         }
         return null;
     }
