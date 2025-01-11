@@ -8,6 +8,7 @@ use App\Models\Transactions\CatchPurchase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
 {
@@ -56,12 +57,13 @@ class SalesController extends Controller
      */
     public function store(CreateRequest $request,CatchPurchase $sale)
     {
-        $columns = ['code' => $sale->code(), 'balance_id' => $sale->createClientBalance($request)->id];
+        return DB::transaction(function () use ($request,$sale){
+            $columns = ['code' => $sale->code(), 'balance_id' => $sale->createClientBalance($request)->id];
 
-        $data = $sale->create(array_merge($request->all(),$columns));
+            $data = $sale->create(array_merge($request->all(),$columns));
 
-        return jsonSuccess(trans("home.alert_success_create",['name' => null]),$data);
-
+            return jsonSuccess(trans("home.alert_success_create",['name' => null]),$data);
+        });
     }
 
     /**
@@ -95,11 +97,13 @@ class SalesController extends Controller
      */
     public function update(CreateRequest $request, CatchPurchase $sale)
     {
-        if($request->paid > removeMines($request->remaining)){
-            $sale->createClientBalance($request);
-            return $sale->updateRecord($request->all());
-        } else
-            return jsonError(trans("transactions/payments.alert_paid_is_bigger"));
+        return DB::transaction(function () use ($request,$sale){
+            if($request->paid > removeMines($request->remaining)){
+                $sale->createClientBalance($request);
+                return $sale->updateRecord($request->all());
+            } else
+                return jsonError(trans("transactions/payments.alert_paid_is_bigger"));
+        });
     }
 
     /**
