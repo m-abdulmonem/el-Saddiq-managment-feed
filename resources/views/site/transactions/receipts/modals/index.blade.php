@@ -58,7 +58,7 @@
                         <select name="invoice_id" id="invoice" class="form-control"></select>
                         <div class="alert alert-danger hide"></div>
                     </div>
-                    <div class="form-group clients-list ">
+                    <div class="form-group clients-list hide">
                         <label for="client_id" class="d-block payment-to-title">@lang("clients/clients.select_client")</label>
                         <select name="client_id" id="client_id" class="form-control"></select>
                         <div class="alert alert-danger hide"></div>
@@ -90,7 +90,7 @@
 
         $(function () {
             invoices();
-            clients();
+            // clients();
 
 
             $("#type_catch_sales").change(function () {
