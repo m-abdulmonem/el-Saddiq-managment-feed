@@ -134,6 +134,8 @@ class ClientsController extends Controller
      */
     public function destroy(ClientsServices $client)
     {
-        return $client->removeRecorder();
+        $client->delete();
+
+        return jsonSuccess(trans('home.alert_delete', ['name' => $client->name]),$client);
     }
 }

@@ -142,7 +142,9 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
-        return $user->removeRecorder();
+        $user->delete();
+
+        return jsonSuccess(trans('home.alert_delete', ['name' => $user->name]),$user);
     }
 
 }

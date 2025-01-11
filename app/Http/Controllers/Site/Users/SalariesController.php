@@ -51,7 +51,8 @@ class SalariesController extends Controller
      */
     public function store(CreateRequest $request,Salary $salary)
     {
-        return $salary->createRecord($request->all());
+        $salary = Salary::create($request->validated());
+        return jsonSuccess(trans("home.alert_success_create", ["name" => $salary->name]), $salary);
     }
 
     /**
@@ -85,17 +86,20 @@ class SalariesController extends Controller
      */
     public function update(UpdateRequest $request, Salary $salary)
     {
-        return $salary->updateRecord($request->all());
+        $salary->update($request->validated());
+        return jsonSuccess(trans("home.alert_success_update", ["name" => $salary->name]), $salary);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param $id
-     * @return Response
+     * @return
      */
-    public function destroy($id)
+    public function destroy(Salary $salary)
     {
-        //
+        $salary->delete();
+
+        return jsonSuccess(trans('home.alert_delete', ['name' => $salary->name]),$salary);
     }
 }
