@@ -148,6 +148,8 @@ class SuppliersController extends Controller
      */
     public function destroy(SupplierServices $supplier)
     {
-        return $supplier->removeRecorder();
+          $supplier->delete();
+
+        return jsonSuccess(trans('home.alert_delete', ['name' => $supplier->name]),$supplier);
     }
 }
