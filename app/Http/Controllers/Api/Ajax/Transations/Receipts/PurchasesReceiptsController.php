@@ -59,15 +59,28 @@ class PurchasesReceiptsController extends Controller
     private function btnPaid($data)
     {
         $trans = trans("transactions/payments.paid");
-        return "<button class='btn btn-info btn-update'
+        if ($data->invoice_id){
+            return "<button class='btn btn-info btn-update'
                     data-id='$data->id'
                     data-invoice-id='{$data->invoice_id}'
-                    data-bill-code='{$data->invoices->code}'
-                    data-price='{$data->invoices->price}'
-                    data-client='{$data->invoices->client->name}'
-                    data-remaining='{$data->invoices->remaining()}'
+                    data-bill-code='{$data->invoices?->code}'
+                    data-price='{$data->invoices?->price}'
+                    data-client='{$data->invoices?->client?->name}'
+                    data-remaining='{$data->invoices?->remaining()}'
                     title='$trans'
                     ><i class='fa fa-hand-holding-usd'></i> $trans</button>";
+        }else{
+            return "<button class='btn btn-info btn-update'
+                    data-id='$data->id'
+                    data-invoice-id='{$data->client_id}'
+                    data-bill-code='{$data->client?->code}'
+                    data-price='0'
+                    data-client='{$data->client?->name}'
+                    data-remaining='{$data->client?->remaining()}'
+                    title='$trans'
+                    ><i class='fa fa-hand-holding-usd'></i> $trans</button>";
+        }
+
     }
 
     private function btnPrint($data)
