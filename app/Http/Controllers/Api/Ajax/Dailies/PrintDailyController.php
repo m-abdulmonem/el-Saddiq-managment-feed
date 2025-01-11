@@ -19,11 +19,12 @@ class PrintDailyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Daily $daily)
+    public function __invoke(?Daily $daily)
     {
+
         $data = [
             'trans' => $this->trans,
-            'daily' => $daily->latest()->first(),
+            'daily' => $daily?: Daily::latest()->first(),
         ];
         return view("$this->folder.print.index",$data);
     }

@@ -336,7 +336,7 @@ Route::group([], function () {
     Route::group(['prefix' => 'dailies', 'as' => 'ajax.dailies.'], function () {
         Route::get("/", DailiesController::class)->name("index");
         Route::put("/close", CloseDailyController::class)->name("close");
-        Route::get("/print/", PrintDailyController::class)->name("print");
+        Route::get("/print/{daily?}", PrintDailyController::class)->name("print");
 
         Route::get("/logout", function () {
             auth()->logout();

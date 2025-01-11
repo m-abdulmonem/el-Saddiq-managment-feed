@@ -42,11 +42,17 @@ class DailiesController extends Controller
 //                $btn = btn_view($this->perm,"users",$data);
 //                $btn .= btn_update($this->perm,"users",$data);
 //                $btn .= btn_delete($this->perm,"users",$data);
-//                        return $btn;
+                        return $this->btnPrint($data);
         })
             ->rawColumns(['action', 'user'])
             ->make(true);
 
+    }
+
+    private function btnPrint($data)
+    {
+        $url = route('ajax.dailies.print', $data->id);
+        return "<a class='btn btn-info' target='_blank' href='$url' ><i class='fa fa-print'></i></a>";
     }
     private function user($data)
     {
