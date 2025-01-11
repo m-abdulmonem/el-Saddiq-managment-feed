@@ -13,6 +13,7 @@ return [
     'client' => 'العميل',
     'transaction' => 'نوع المعاملة',
     'paid' => 'المبلغ المدفوع',
+    'total_transactions' => 'اجمالى المعاملات المالبة',
     'summation' => 'المبلغ المحصل',
     'remaining' => 'المتبقى',
     'paid_percentage' => 'نسبة الدفوع',

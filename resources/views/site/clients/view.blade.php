@@ -113,7 +113,7 @@
                 <!-- /.card-body -->
                 <div class="card-footer d-flex h5">
                     <ul class="list-unstyled d-flex w-100">
-                        <li class="w-25">@lang("balances.paid") :  <span class="primary-color ml-3">  {{ currency($client->totalBills()) }}</span></li>
+                        <li class="w-25">@lang("suppliers/bills.total_transactions") :  <span class="primary-color ml-3">  {{ currency($client->totalBills()) }}</span></li>
                         <li class="w-25">@lang("balances.paid") :  <span class="primary-color ml-3">  {{ currency($client->totalPaid()) }}</span></li>
                         <li class="w-25">@lang("balances.creditor") :  <span class="primary-color ml-3">  {{ currency($client->creditor()) }}</span></li>
                         <li class="w-25">@lang("balances.debtor") :  <span class="primary-color ml-3">  {{ currency($client->debtor()) }}</span></li>
