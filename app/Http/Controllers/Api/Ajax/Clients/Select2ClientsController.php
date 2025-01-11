@@ -42,7 +42,7 @@ class Select2ClientsController extends Controller
 
     private function query()
     {
-        if ($keywords = $this->request->keywords){
+        if (($keywords = $this->request->keywords) || ($keywords = $this->request->term)) {
             return ClientsServices::search($keywords);
             // return json(->map($callback)->toArray());
         }
