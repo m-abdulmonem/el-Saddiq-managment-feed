@@ -90,6 +90,7 @@
 
         $(function () {
             invoices();
+            clients();
 
 
             $("#type_catch_sales").change(function () {
