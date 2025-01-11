@@ -173,7 +173,8 @@
                     width: '100%',
                     placeholder: "@lang("transactions/payments.select_invoice")",
                     ajax: {
-                        url: '{{ route("ajax.clients.names") }}',
+                        url: '{{ route("ajax.clients.invoices.codes") }}',
+                        {{--url: '{{ route("ajax.clients.names") }}',--}}
                         dataType: 'json',
                         processResults: function (data) {
                             return {results: data[0]}
@@ -195,7 +196,7 @@
                     width: '100%',
                     placeholder: "@lang("clients/clients.select_client")",
                     ajax: {
-                        url: '{{ route("ajax.clients.invoices.codes") }}',
+                        url: '{{ route("ajax.clients.names") }}',
                         dataType: 'json',
                         processResults: function (data) {
                             return {results: data[0]}
