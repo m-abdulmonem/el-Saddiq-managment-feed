@@ -58,7 +58,7 @@
                         <select name="invoice_id" id="invoice" class="form-control"></select>
                         <div class="alert alert-danger hide"></div>
                     </div>
-                    <div class="form-group clients-list">
+                    <div class="form-group clients-list hide">
                         <label for="client" class="d-block payment-to-title">@lang("clients/clients.select_client")</label>
                         <select name="client_id" id="client" class="form-control"></select>
                         <div class="alert alert-danger hide"></div>
@@ -95,18 +95,18 @@
             $("#payment_type").change(function () {
                 switch ($(this).val()) {
                     case "invoices":
-                        $('invoices-list').show()
-                        $('clients-list').hide()
+                        $('invoices-list').addClass('show').removeClass('hide')
+                        $('clients-list').addClass('hide').removeClass('show')
                         invoices();
                         break;
                     case "clients":
-                        $('invoices-list').hide()
-                        $('clients-list').show()
+                        $('invoices-list').addClass('hide').removeClass('show')
+                        $('clients-list').addClass('show').removeClass('hide')
                         clients();
                         break;
                     default :
-                        $('clients-list').hide()
-                        $('invoices-list').show()
+                        $('clients-list').addClass('hide').removeClass('show')
+                        $('invoices-list').addClass('show').removeClass('hide')
                         invoices();
                         break;
                 }
