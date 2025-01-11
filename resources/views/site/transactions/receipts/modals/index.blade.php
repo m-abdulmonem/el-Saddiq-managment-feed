@@ -93,6 +93,7 @@
 
 
             $("#type_catch_sales").change(function () {
+                console.log($(this).val())
                 switch ($(this).val()) {
                     case "invoices":
                         $('invoices-list').addClass('show').removeClass('hide')
