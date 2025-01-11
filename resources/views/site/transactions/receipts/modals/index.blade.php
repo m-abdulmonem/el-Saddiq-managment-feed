@@ -173,6 +173,7 @@
                 });
                 $("#invoice").select2({
                     width: '100%',
+                    dropdownParent: $('#paymentsModal'),
                     placeholder: "@lang("transactions/payments.select_invoice")",
                     ajax: {
                         url: '{{ route("ajax.clients.invoices.codes") }}',
@@ -196,6 +197,7 @@
                 });
                 $("#client_id").select2({
                     width: '100%',
+                    dropdownParent: $('#paymentsModal'),
                     placeholder: "@lang("clients/clients.select_client")",
                     ajax: {
                         url: '{{ route("ajax.clients.names") }}',
