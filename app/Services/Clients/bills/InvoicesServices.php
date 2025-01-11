@@ -102,7 +102,7 @@ class InvoicesServices extends ClientBill
     }
     public function remainingBalance()
     {
-        return $this->totalPaid("payment") - $this->invoices()->latest()->first()->price;
+        return $this->totalPaid("payment") - ($this->invoices()->latest()->first()?->price ?: 0);
     }
 
     public function currentBalance()
