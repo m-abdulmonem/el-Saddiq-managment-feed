@@ -47,7 +47,7 @@ class Select2ClientsController extends Controller
             // return json(->map($callback)->toArray());
         }
 
-        return $this->clients->take($this->request->pagination ?: 10);
+        return $this->clients;//->take($this->request->pagination ?: 10);
     }
 
 }
