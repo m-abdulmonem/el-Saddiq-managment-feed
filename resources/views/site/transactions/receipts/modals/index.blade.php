@@ -44,8 +44,8 @@
                     </div>
 
                     <div class="form-group ">
-                        <label for="payment_type" class="d-block">@lang("$trans.type")</label>
-                        <select name="payment_type" id="payment_type" class="form-control">
+                        <label for="type_catch_sales" class="d-block">@lang("$trans.type")</label>
+                        <select name="type_catch_sales" id="type_catch_sales" class="form-control">
                             <option value="invoices" selected>@lang("$trans.invoices")</option>
                             <option value="clients">@lang("$trans.clients")</option>
                         </select>
@@ -92,7 +92,7 @@
             invoices();
 
 
-            $("#payment_type").change(function () {
+            $("#type_catch_sales").change(function () {
                 switch ($(this).val()) {
                     case "invoices":
                         $('invoices-list').addClass('show').removeClass('hide')
