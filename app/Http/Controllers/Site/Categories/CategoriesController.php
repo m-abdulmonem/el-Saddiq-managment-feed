@@ -105,7 +105,7 @@ class CategoriesController extends Controller
      */
     public function update(UpdateRequest $request, Category $category)
     {
-        $category = $category->update($request->validated());
+         $category->update($request->validated());
 
         return jsonSuccess(trans("home.alert_success_update"), $category);
 //        return $category->updateRecord($request->all());
@@ -122,7 +122,7 @@ class CategoriesController extends Controller
     {
         $data = $category->delete();
 
-        return jsonSuccess(trans('home.alert_delete', ['name' => $data->name]),$category);
+        return jsonSuccess(trans('home.alert_delete', ['name' => $stock->name]),$category);
 //        return $category->removeRecorder();
     }
 

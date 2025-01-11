@@ -63,7 +63,7 @@ class StocksController extends Controller
      */
     public function store(CreateRequest $request,StockServices $stock)
     {
-        return $stock->createWithCode($request->all());
+        return $stock->createWithCode($request->validated());
     }
 
     /**
@@ -104,7 +104,9 @@ class StocksController extends Controller
      */
     public function update(UpdateRequest $request, StockServices $stock)
     {
-        return $stock->updateRecord($request->all());
+        $stock->update($request->validated());
+
+        return jsonSuccess(trans("home.alert_success_update"), $stock);
     }
 
     /**
@@ -116,6 +118,9 @@ class StocksController extends Controller
      */
     public function destroy(Stock $stock)
     {
-        return $stock->removeRecorder();
+        $data = $stock->delete();
+
+        return jsonSuccess(trans('home.alert_delete', ['name' => $stock->name]),$stock);
+//        return $stock->removeRecorder();
     }
 }
