@@ -26,10 +26,10 @@ class Select2BanksController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $callback = function ($bank) {
+        $callback = function ($bankName,$bankId) {
             return [
-                'id' => $bank->id,
-                'text' => $bank->name,
+                'id' => $bankId,
+                'text' => $bankName,
             ];
         };
 
