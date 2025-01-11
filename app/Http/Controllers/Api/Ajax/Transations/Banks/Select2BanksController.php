@@ -8,8 +8,10 @@ use App\Models\Transactions\Bank;
 
 class Select2BanksController extends Controller
 {
+    protected string $perm = "banks";
 
-    public function __construct(protected $perm = "banks",Request $request)
+
+    public function __construct(Request $request)
     {
         if (!$request->ajax()) {
             \abort(404);
