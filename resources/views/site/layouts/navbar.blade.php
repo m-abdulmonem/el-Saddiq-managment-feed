@@ -287,44 +287,44 @@
     @endcan
     <!-- ./categories -->
 
-    @if( user_can(['read chick','read chick_order','read chick_booking']) )
-        @php($chicks = ['chicks','chicks/orders','chicks/booking'])
-        <li class="nav-item has-treeview @menuAny($chicks,0) ">
-            <a href="{{ url("chicks") }}" class="nav-link @menuAny($chicks,1)">
-                <i class="fas fa-kiwi-bird"></i>
-                <p>
-                    @lang("chicks/chicks.title")
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                @can("read chick")
-                    <li class="nav-item">
-                        <a href="{{ route("chicks.index") }}" class="nav-link @menu('chicks',1)">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>@lang("chicks/chicks.title")</p>
-                        </a>
-                    </li>
-                @endcan
-                @can("read chick_order")
-                    <li class="nav-item">
-                        <a href="{{ route("chicks.orders.index") }}" class="nav-link @menu('chicks/orders',1)">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>@lang("chicks/orders.title")</p>
-                        </a>
-                    </li>
-                @endcan
-                @can("read chick_booking")
-                    <li class="nav-item">
-                        <a href="{{ route("chicks.booking.index") }}" class="nav-link @menu('chicks/booking',1)">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>@lang("chicks/booking.title")</p>
-                        </a>
-                    </li>
-                @endcan
-            </ul>
-        </li>
-    @endcan
+{{--    @if( user_can(['read chick','read chick_order','read chick_booking']) )--}}
+{{--        @php($chicks = ['chicks','chicks/orders','chicks/booking'])--}}
+{{--        <li class="nav-item has-treeview @menuAny($chicks,0) ">--}}
+{{--            <a href="{{ url("chicks") }}" class="nav-link @menuAny($chicks,1)">--}}
+{{--                <i class="fas fa-kiwi-bird"></i>--}}
+{{--                <p>--}}
+{{--                    @lang("chicks/chicks.title")--}}
+{{--                    <i class="right fas fa-angle-left"></i>--}}
+{{--                </p>--}}
+{{--            </a>--}}
+{{--            <ul class="nav nav-treeview">--}}
+{{--                @can("read chick")--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{ route("chicks.index") }}" class="nav-link @menu('chicks',1)">--}}
+{{--                            <i class="far fa-circle nav-icon"></i>--}}
+{{--                            <p>@lang("chicks/chicks.title")</p>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                @endcan--}}
+{{--                @can("read chick_order")--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{ route("chicks.orders.index") }}" class="nav-link @menu('chicks/orders',1)">--}}
+{{--                            <i class="far fa-circle nav-icon"></i>--}}
+{{--                            <p>@lang("chicks/orders.title")</p>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                @endcan--}}
+{{--                @can("read chick_booking")--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{ route("chicks.booking.index") }}" class="nav-link @menu('chicks/booking',1)">--}}
+{{--                            <i class="far fa-circle nav-icon"></i>--}}
+{{--                            <p>@lang("chicks/booking.title")</p>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                @endcan--}}
+{{--            </ul>--}}
+{{--        </li>--}}
+{{--    @endcan--}}
     <!-- ./chicks -->
 
     @can("read setting")
