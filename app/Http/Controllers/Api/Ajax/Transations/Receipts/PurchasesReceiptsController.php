@@ -27,23 +27,25 @@ class PurchasesReceiptsController extends Controller
             return datatables()->of(CatchPurchase::latest()->get())
                 ->addIndexColumn()
                 ->addColumn("number",function ($data){
-                    return $data->invoices->code;
+                    return $data->invoices?->code;
                 })
                 ->addColumn("price",function ($data){
-                    return currency($data->invoices->price);
+                    return currency($data->invoices?->price);
                 })
                 ->addColumn("paid",function ($data){
-                    return currency($data->invoices->totalPaid());
+                    return currency($data->invoices?->totalPaid() ?: $data->client?->totalPaid() );
                 })
                 ->addColumn("remaining",function ($data){
-                    return currency(removeMines($data->invoices->remaining()));
+                    $re = $data->invoices?->remaining();
+                    return currency($re ? removeMines($re): $data->client?->remaining());
                 })
                 ->addColumn("percentage",function ($data){
-                    $percentage = (removeMines($data->invoices->totalPaid()) * 100) / $data->invoices->price;
+                    $totalPaid = $data->invoices?->totalPaid() ?: $data->client?->totalPaid();
+                    $percentage = (removeMines($totalPaid) * 100) / ($data->invoices?->price ?: $data->client?->remaining() );
                     return intval($percentage);
                 })
                 ->addColumn("date",function ($data){
-                    return $data->created_at->format("Y-m-d h:i:s");
+                    return $data->created_at?->format("Y-m-d h:i:s");
                 })
                 ->addColumn('action', function($data){
                     $btn =  $this->btnPaid($data);
