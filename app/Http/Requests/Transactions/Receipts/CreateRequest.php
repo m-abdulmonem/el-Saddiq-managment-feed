@@ -28,6 +28,7 @@ class CreateRequest extends FormRequest
             'paid' => 'required',
             'bill_id' => 'sometimes|nullable|integer',
             'invoice_id' => 'sometimes|nullable|integer',
+            'client_id' => 'sometimes|nullable|integer',
             'balance_id' => 'sometimes|nullable|integer',
             'bank_id' => 'sometimes|nullable|integer',
         ];

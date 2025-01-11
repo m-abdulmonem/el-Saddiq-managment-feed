@@ -28,7 +28,7 @@
                             </ul>
                         </div>
                         <div class="col-6">
-                            <ul class="list-unstyled main-info">
+                            <ul class="list-unstyled main-info total-invoice-price">
                                 <li>@lang("suppliers/bills.total_price") : <span id="price"></span></li>
                             </ul>
                         </div>
@@ -44,8 +44,23 @@
                     </div>
 
                     <div class="form-group ">
+                        <label for="payment_type" class="d-block">@lang("$trans.type")</label>
+                        <select name="payment_type" id="payment_type" class="form-control">
+                            <option value="invoices" selected>@lang("$trans.invoices")</option>
+                            <option value="clients">@lang("$trans.clients")</option>
+                        </select>
+                        <div class="alert alert-danger hide"></div>
+                    </div>
+
+
+                    <div class="form-group invoices-list">
                         <label for="invoice" class="d-block payment-to-title">@lang("transactions/payments.select_invoice")</label>
                         <select name="invoice_id" id="invoice" class="form-control"></select>
+                        <div class="alert alert-danger hide"></div>
+                    </div>
+                    <div class="form-group clients-list">
+                        <label for="client" class="d-block payment-to-title">@lang("clients/clients.select_client")</label>
+                        <select name="client_id" id="client" class="form-control"></select>
                         <div class="alert alert-danger hide"></div>
                     </div>
 
@@ -72,8 +87,24 @@
 
     <script>
 
+
         $(function () {
             invoices();
+
+
+            $("#payment_type").change(function () {
+                switch ($(this).val()) {
+                    case "invoices":
+                        invoices();
+                        break;
+                    case "clients":
+                        clients();
+                        break;
+                    default :
+                        invoices();
+                        break;
+                }
+            });
 
             $(".btn-add").click(function () {
                 btnCreate();
@@ -125,6 +156,7 @@
 
             function invoices() {
                 $("#invoice").on("select2:select", function (e) {
+                    $('.total-invoice-price').show();
                     $.each(e.params.data,function (k,v) {
                         $(`#${k}`).text(v)
                     });
@@ -135,7 +167,7 @@
                     width: '100%',
                     placeholder: "@lang("transactions/payments.select_invoice")",
                     ajax: {
-                        url: '{{ route("ajax.clients.invoices.codes") }}',
+                        url: '{{ route("ajax.clients.names") }}',
                         dataType: 'json',
                         processResults: function (data) {
                             return {results: data[0]}
@@ -144,6 +176,27 @@
                 });
             }
 
+            function clients() {
+                $("#client").on("select2:select", function (e) {
+                    const data = e.params.data;
+                    $(`#client`).text(data.text)
+                    $(`#remaining`).text(data.debit);
+                    $('.total-invoice-price').hide();
+                    $(".bill-info").show();
+                    console.log(e.params.data)
+                });
+                $("#client").select2({
+                    width: '100%',
+                    placeholder: "@lang("clients/clients.select_client")",
+                    ajax: {
+                        url: '{{ route("ajax.clients.invoices.codes") }}',
+                        dataType: 'json',
+                        processResults: function (data) {
+                            return {results: data[0]}
+                        }
+                    }
+                });
+            }
 
 
             /**

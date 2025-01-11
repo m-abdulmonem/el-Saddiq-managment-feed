@@ -29,6 +29,7 @@ class Select2ClientsController extends Controller
                 'text' => $client->name(),
                 'phone' => $client->phone,
                 'credit'=> $client->credit_limit,
+                'debit' => $client->debtor(),
                 'remaining' => ($client->credit_limit - $client->creditor()),
                 'limit'=> $client->maximum_repayment_period
             ];
