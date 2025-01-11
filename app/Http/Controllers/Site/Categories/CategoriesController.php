@@ -113,7 +113,10 @@ class CategoriesController extends Controller
      */
     public function destroy(Category $category)
     {
-        return $category->removeRecorder();
+        $data = $category->delete();
+
+        return jsonSuccess(trans('home.alert_delete', ['name' => $data->name]),$category);
+//        return $category->removeRecorder();
     }
 
 
