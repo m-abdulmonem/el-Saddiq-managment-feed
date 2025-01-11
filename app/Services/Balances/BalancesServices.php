@@ -84,8 +84,8 @@ class BalancesServices
             ->rawColumns(['client','user'])
             ->make(true);
     }
-    
-    
+
+
     /**
      * redirect route to Supplier page profile
      *
@@ -122,7 +122,8 @@ class BalancesServices
      */
     private function userLink($data)
     {
-        return "<a class='info-color' href='" . route("users.show",$data->user->id) . "'>{$data->user->name()}</a>";
+        return "";
+//        return "<a class='info-color' href='" . route("users.show",$data->user?->id) . "'>{$data->user?->name()}</a>";
     }
 
 

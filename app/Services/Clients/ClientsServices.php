@@ -127,7 +127,9 @@ class ClientsServices extends Client
      */
     public function debtor()
     {
-        return (($debt = $this->totalPaid() - $this->totalBills()) > 0) ? $debt : 0;
+        $debt = $this->totalPaid() - $this->totalBills();
+
+        return ($debt > 0) ? $debt : 0;
     }
 
     /**
@@ -164,8 +166,8 @@ class ClientsServices extends Client
     public function totalBills($ids = null)
     {
         return ($ids)
-            ? (int)$this->bills()->find($ids)->sum("price")
-            : (int)$this->bills()->sum("price");
+            ? (float)$this->bills()->find($ids)->sum("price")
+            : (float)$this->bills()->sum("price");
     }
 
     /**
