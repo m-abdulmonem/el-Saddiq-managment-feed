@@ -68,7 +68,7 @@ class CatchPurchase extends Model
             'code' => ClientBalance::code(),
             'paid' => $request->paid,
             'type' => 'catch',
-            'bill_id' => $request->invoice_id,
+            'bill_id' =>$request->client_id ? null : $request->invoice_id,
             'client_id' => $request->client_id ?: InvoicesServices::find($request->invoice_id)?->client_id,
             'user_id' => auth()->id()
         ]);
