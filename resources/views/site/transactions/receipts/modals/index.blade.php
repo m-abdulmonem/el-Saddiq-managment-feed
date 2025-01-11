@@ -95,12 +95,18 @@
             $("#payment_type").change(function () {
                 switch ($(this).val()) {
                     case "invoices":
+                        $('invoices-list').show()
+                        $('clients-list').hide()
                         invoices();
                         break;
                     case "clients":
+                        $('invoices-list').hide()
+                        $('clients-list').show()
                         clients();
                         break;
                     default :
+                        $('clients-list').hide()
+                        $('invoices-list').show()
                         invoices();
                         break;
                 }
