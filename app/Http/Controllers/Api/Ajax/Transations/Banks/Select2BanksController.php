@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Ajax\Transations\Banks;
 
 use App\Http\Controllers\Controller;
+use App\Models\Transactions\Expenses;
 use Illuminate\Http\Request;
 use App\Models\Transactions\Bank;
 
@@ -22,17 +23,27 @@ class Select2BanksController extends Controller
      * Handle the incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return
      */
     public function __invoke(Request $request)
     {
-        $callback = function ($bankName,$bankId) {
+//        $callback = function ($bankName,$bankId) {
+//            return [
+//                'id' => $bankId,
+//                'text' => $bankName,
+//            ];
+//        };
+//
+//        return json(array_values(Bank::pluck("name", "id")->map($callback)->toArray()));
+
+        $callback = function ($bank) {
+
             return [
-                'id' => $bankId,
-                'text' => $bankName,
+                'id' => $bank->id,
+                'text' => $bank->name,
             ];
         };
 
-        return json(Bank::pluck("name", "id")->map($callback)->toArray());
+        return json(Bank::all()->map($callback)->toArray());
     }
 }
