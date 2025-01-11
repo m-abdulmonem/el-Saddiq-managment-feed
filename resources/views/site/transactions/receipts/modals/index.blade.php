@@ -61,7 +61,7 @@
                     <div class="form-group clients-list hide">
                         <label for="client" class="d-block payment-to-title">@lang("clients/clients.select_client")</label>
                         <select name="client_id" id="client" class="form-control"></select>
-                        <div class="alert alert-danger hide"></div>
+                        <div class="alert alert-danger "></div>
                     </div>
 
                     <div class="form-group ">
@@ -194,7 +194,7 @@
                     $(`#remaining`).text(data.debit);
                     $('.total-invoice-price').hide();
                     $(".bill-info").show();
-                    console.log(e.params.data)
+                    // console.log(e.params.data)
                 });
                 $("#client").select2({
                     width: '100%',
