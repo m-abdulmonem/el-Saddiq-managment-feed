@@ -24,7 +24,7 @@ class PurchasesReceiptsController extends Controller
     public function __invoke(Request $request)
     {
         if (request()->ajax())
-            return datatables()->of(CatchPurchase::latest())
+            return datatables()->of(CatchPurchase::latest()->get())
                 ->addIndexColumn()
                 ->addColumn("number",function ($data){
                     return $data->invoices->code;
