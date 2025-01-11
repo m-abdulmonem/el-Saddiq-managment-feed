@@ -61,6 +61,10 @@ function btn_delete(table) {
                     });
                 }else
                     _this.removeSpanner();
+                table?.draw();
+
+                _this.attr('disabled',false).html('<i class="fa fa-trash"></i>')
+
             });
     });
     $(".btn-delete").click(function () {
@@ -105,7 +109,11 @@ function btn_delete(table) {
                         }
                     });
                 }else
-                    _this.removeAttr("disabled").children("span").hide().parent().children("a").show();
+                    table?.draw();
+
+                _this.attr('disabled',false).html('<i class="fa fa-trash"></i>')
+
+                _this.removeAttr("disabled").children("span").hide().parent().children("a").show();
             });
     })
 }
