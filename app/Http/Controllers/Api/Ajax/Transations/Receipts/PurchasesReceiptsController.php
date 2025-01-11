@@ -58,7 +58,7 @@ class PurchasesReceiptsController extends Controller
 
     private function btnPaid($data)
     {
-        if (!$data->client?->remaining()){
+        if ($data->client?->remaining() <= 0){
             return "";
         }
         $trans = trans("transactions/payments.paid");
