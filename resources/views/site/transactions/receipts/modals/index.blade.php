@@ -58,10 +58,10 @@
                         <select name="invoice_id" id="invoice" class="form-control"></select>
                         <div class="alert alert-danger hide"></div>
                     </div>
-                    <div class="form-group clients-list hide">
+                    <div class="form-group clients-list ">
                         <label for="client" class="d-block payment-to-title">@lang("clients/clients.select_client")</label>
                         <select name="client_id" id="client" class="form-control"></select>
-                        <div class="alert alert-danger "></div>
+                        <div class="alert alert-danger hide"></div>
                     </div>
 
                     <div class="form-group ">
