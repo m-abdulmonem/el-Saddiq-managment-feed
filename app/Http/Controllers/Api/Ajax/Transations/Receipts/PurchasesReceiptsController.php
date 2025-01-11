@@ -58,6 +58,9 @@ class PurchasesReceiptsController extends Controller
 
     private function btnPaid($data)
     {
+        if (!$data->client?->remaining()){
+            return "";
+        }
         $trans = trans("transactions/payments.paid");
         if ($data->invoice_id){
             return "<button class='btn btn-info btn-update'
