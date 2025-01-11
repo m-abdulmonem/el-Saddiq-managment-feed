@@ -28,6 +28,8 @@ function btn_delete(table) {
                         type: "DELETE",
                         dataType: "json",
                         success: function (result) {
+                            _this.attr('disabled',false).html('<i class="fa fa-trash"></i>')
+                            table?.draw();
                             if (result.status === 1) {
                                 swal(result.msg, {
                                     icon: "success",
@@ -36,6 +38,7 @@ function btn_delete(table) {
 
                                 if (table)
                                     table.draw();
+                                _this.removeSpanner();
                             }else{
                                 if (Array.isArray(result.msg)){
                                     $.each(data,function (k,v) {
@@ -79,6 +82,8 @@ function btn_delete(table) {
                         type: "DELETE",
                         dataType: "json",
                         success: function (result) {
+                            _this.attr('disabled',false).html('<i class="fa fa-trash"></i>')
+                            table?.draw();
                             if (result.status === 1) {
                                 swal(result.msg, {
                                     icon: "success",
