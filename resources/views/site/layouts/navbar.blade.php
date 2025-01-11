@@ -32,14 +32,14 @@
                         </a>
                     </li>
                 @endcan
-                @can("read medicine")
-                    <li class="nav-item">
-                        <a href="{{ route("medicines.index") }}" class="nav-link @menu($product[1],1)">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>@lang("products/medicines.title")</p>
-                        </a>
-                    </li>
-                @endcan
+{{--                @can("read medicine")--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{ route("medicines.index") }}" class="nav-link @menu($product[1],1)">--}}
+{{--                            <i class="far fa-circle nav-icon"></i>--}}
+{{--                            <p>@lang("products/medicines.title")</p>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                @endcan--}}
             </ul>
         </li>
     @endif
