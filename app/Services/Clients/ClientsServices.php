@@ -117,7 +117,7 @@ class ClientsServices extends Client
      */
     public function creditor()
     {
-        return (($debt = $this->totalPaid() - $this->totalBills()) < 0) ? removeMines($debt) : 0;
+        return (($debt = $this->totalPaid() - $this->totalBills()) > 0) ? removeMines($debt) : 0;
     }
 
     /**
@@ -129,7 +129,7 @@ class ClientsServices extends Client
     {
         $debt = $this->totalPaid() - $this->totalBills();
 
-        return ($debt > 0) ? $debt : 0;
+        return ($debt < 0) ? removeMines($debt) : 0;
     }
 
     /**
