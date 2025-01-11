@@ -59,8 +59,8 @@
                         <div class="alert alert-danger hide"></div>
                     </div>
                     <div class="form-group clients-list ">
-                        <label for="client" class="d-block payment-to-title">@lang("clients/clients.select_client")</label>
-                        <select name="client_id" id="client" class="form-control"></select>
+                        <label for="client_id" class="d-block payment-to-title">@lang("clients/clients.select_client")</label>
+                        <select name="client_id" id="client_id" class="form-control"></select>
                         <div class="alert alert-danger hide"></div>
                     </div>
 
@@ -97,13 +97,11 @@
 
                 switch ($(this).val()) {
                     case "invoices":
-                        console.log('invoices')
                         $('invoices-list').addClass('show').removeClass('hide')
                         $('clients-list').addClass('hide').removeClass('show')
                         invoices();
                         break;
                     case "clients":
-                        console.log('clients')
                         $('invoices-list').addClass('hide').removeClass('show')
                         $('clients-list').addClass('show').removeClass('hide')
                         clients();
@@ -172,7 +170,6 @@
                         $(`#${k}`).text(v)
                     });
                     $(".bill-info").show();
-                    console.log(e.params.data)
                 });
                 $("#invoice").select2({
                     width: '100%',
@@ -189,7 +186,7 @@
             }
 
             function clients() {
-                $("#client").on("select2:select", function (e) {
+                $("#client_id").on("select2:select", function (e) {
                     const data = e.params.data;
                     $(`#client`).text(data.text)
                     $(`#remaining`).text(data.debit);
@@ -197,7 +194,7 @@
                     $(".bill-info").show();
                     // console.log(e.params.data)
                 });
-                $("#client").select2({
+                $("#client_id").select2({
                     width: '100%',
                     placeholder: "@lang("clients/clients.select_client")",
                     ajax: {
