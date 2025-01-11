@@ -43,7 +43,7 @@ class ReturnedPaymentsController extends Controller
             ->addColumn("percentage", function ($data) {
             if ($bill = InvoicesServices::find($data->client_bill_id)) {
                 $percentage = (removeMines($bill->totalPaid("payment")) * 100) / $this->clientBillReturn($data, 'price');
-                return $this->percentage(intval($percentage));
+                return intval($percentage);
             }
         })
             ->addColumn("date", function ($data) {
