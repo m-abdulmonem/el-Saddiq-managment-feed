@@ -347,6 +347,7 @@ if (!function_exists("jsonSuccess")) {
                     : $data)
             ),
             'code' => 1,
+            'status' => 1
         ]);
 
     }
